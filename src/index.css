@@ -13,10 +13,13 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary: #0325e1;
+    --primary-foreground: #005cc7;
+    --primary-gradient: transparent
+      linear-gradient(105deg, #0daae9 0%, #0325e1 100%) 0% 0% no-repeat
+      padding-box;
 
-    --secondary: 210 40% 96.1%;
+    --secondary: #0daae9;
     --secondary-foreground: 222.2 47.4% 11.2%;
 
     --muted: 210 40% 96.1%;
@@ -66,14 +69,6 @@
   }
 }
 
-.grey-gradient {
-  background: linear-gradient(
-    180deg,
-    rgb(238, 237, 244),
-    rgba(238, 237, 244, 100)
-  );
-}
-
 @layer base {
   * {
     @apply border-border;
@@ -85,7 +80,7 @@
 
 @layer components {
   .fl-container {
-    @apply container mx-auto px-2 sm:px-6;
+    @apply container mx-auto px-2 sm:px-6 lg:px-6 xl:px-1;
   }
 
   .swiper-button {
@@ -114,6 +109,30 @@ css-t3ipsp-control:hover {
   border-color: #3c82f6 !important;
 }
 
+/* Global swaper css */
+span.swiper-pagination-bullet {
+  width: 50px;
+  height: 5px;
+  border-radius: 4px;
+}
+
+span.swiper-pagination-bullet.swiper-pagination-bullet-active {
+  background: linear-gradient(45deg, #0ca2e8, #042be2);
+}
+.swiper-wrapper {
+  -webkit-transition-timing-function: linear !important;
+  -o-transition-timing-function: linear !important;
+  transition-timing-function: linear !important;
+}
+
+.grey-gradient {
+  background: linear-gradient(
+    180deg,
+    rgb(238, 237, 244),
+    rgba(238, 237, 244, 100)
+  );
+}
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -131,9 +150,6 @@ css-t3ipsp-control:hover {
 
 
 body {
-  margin: 0;
-  display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
 }
