@@ -11,6 +11,7 @@ const HomePage = () => {
       <PromoSection />
       <ProductList  />
       <BlogSection />
+      {/* home page section */}
     
     </div>
   );
