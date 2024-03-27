@@ -38,6 +38,8 @@ const Navbar = () => {
           scrolled ? "bg-white py-4" : "bg-transparent py-7"
         } transition-all duration-700 ease-in-out`}
       >
+
+      {/* Menu for Large screen */}
         <div className="fl-container flex flex-row items-center justify-between px-4 xl:px-0">
           <div className="inline-flex items-center">
             <CompanyLogo
@@ -90,6 +92,8 @@ const Navbar = () => {
             </button>
           </div>
         </div>
+
+        {/* Menu for mobile devices / small screens */}
         {isMenuOpen && (
           <>
             <div className="bg-white absolute block w-full shadow-lg md:hidden">

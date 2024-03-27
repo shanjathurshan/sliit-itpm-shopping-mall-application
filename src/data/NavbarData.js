@@ -27,8 +27,8 @@ const NavbarData = {
       link: "/careers",
     },
     {
-      title: "More",
-      link: "/more",
+      title: "Admin",
+      link: "/admin",
     },
   ],
 };

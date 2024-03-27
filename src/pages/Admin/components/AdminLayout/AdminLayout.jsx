@@ -1,11 +1,10 @@
 import React from "react";
+import AdminSidebar from "../AdminSidebar/AdminSidebar";
 
 const AdminLayout = ({ children }) => {
   return (
     <div>
-      {/* <UserNavbar /> */}
-      Admin layout navbar will be here
-      {children}
+      <AdminSidebar>{children}</AdminSidebar>
     </div>
   );
 };

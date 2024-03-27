@@ -1,13 +1,17 @@
 import "./App.css";
 import Footer from "./components/footer/Footer";
 import Navbar from "./components/navbar/navbar";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import HomePage from "./pages/User/Home/HomePage";
 import LoginPage from "./pages/Auth/LoginPage";
 import RegisterPage from "./pages/Auth/RegisterPage";
-import AdminLayout from "./pages/Admin/components/Layout/AdminLayout";
 import PublicLayout from "./components/PublicLayout/PublicLayout";
 import Shops from "./pages/User/Shops/Shops";
+import AdminLayout from './pages/Admin/components/AdminLayout/AdminLayout';
+import AdminDashboard from './pages/Admin/pages/AdminDashboard/AdminDashboard';
+import GameCenter from './pages/Admin/pages/GameCenter/GameCenter';
+import ErrorPage from "./components/404/ErrorPage";
+import QRcodePage from "./pages/User/QRcode/QRcodePage";
 
 function App() {
   return (
@@ -27,6 +31,11 @@ function App() {
                     {/* Auth routes */}
                     <Route path="/login" element={<LoginPage />} />
                     <Route path="/register" element={<RegisterPage />} />
+
+                    <Route path="/qr-scan" element={<QRcodePage />} />
+
+                    <Route path="*" element={<ErrorPage />} />
+
                   </Routes>
                 </PublicLayout>
               }
@@ -38,8 +47,10 @@ function App() {
               element={
                 <AdminLayout>
                   <Routes>
-                    <Route path="/" element={<LoginPage />} />
-                    <Route path="users" element={<Shops />} />
+                    <Route path="/" element={<Navigate to="dashboard" />} />
+                    <Route path="/dashboard" element={<AdminDashboard />} />
+                    <Route path="game-center" element={<GameCenter />} />
+                    <Route path="*" element={<ErrorPage />} />
                   </Routes>
                 </AdminLayout>
               }
