@@ -2,30 +2,50 @@ import "./App.css";
 import Footer from "./components/footer/Footer";
 import Navbar from "./components/navbar/navbar";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import HomePage from "./pages/Home/HomePage";
-import Products from './pages/Shops/Shops';
-import LoginPage from './pages/Auth/LoginPage';
-import RegisterPage from './pages/Auth/RegisterPage';
+import HomePage from "./pages/User/Home/HomePage";
+import LoginPage from "./pages/Auth/LoginPage";
+import RegisterPage from "./pages/Auth/RegisterPage";
+import AdminLayout from "./pages/Admin/components/Layout/AdminLayout";
+import PublicLayout from "./components/PublicLayout/PublicLayout";
+import Shops from "./pages/User/Shops/Shops";
 
 function App() {
   return (
     <>
       <Router>
-        <Navbar />
-        <div className="pt-20 min-h-[65vh]">
+        <div className="">
           <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/products" element={<Products />} />
-            <Route path="/events" element={<HomePage />} />
-            <Route path="/annual" element={<HomePage />} />
-            <Route path="/team" element={<HomePage />} />
-            <Route path="/blogs" element={<HomePage />} />
+            {/* Public routes */}
+            <Route
+              path="/*"
+              element={
+                <PublicLayout>
+                  <Routes>
+                    <Route path="/" element={<HomePage />} />
+                    <Route path="/shops" element={<Shops />} />
 
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
+                    {/* Auth routes */}
+                    <Route path="/login" element={<LoginPage />} />
+                    <Route path="/register" element={<RegisterPage />} />
+                  </Routes>
+                </PublicLayout>
+              }
+            />
+
+            {/* Admin routes */}
+            <Route
+              path="/admin/*"
+              element={
+                <AdminLayout>
+                  <Routes>
+                    <Route path="/" element={<LoginPage />} />
+                    <Route path="users" element={<Shops />} />
+                  </Routes>
+                </AdminLayout>
+              }
+            />
           </Routes>
         </div>
-        <Footer />
       </Router>
     </>
   );
