@@ -71,7 +71,6 @@ const AdminSidebar = ({children}) => {
             </div>
             <div className="flex flex-col flex-grow">
                 <div className="flex items-center flex-shrink-0 h-16 px-8">
-                    <h1 className="text-lg font-medium">Page Title</h1>
                     <button className="flex items-center justify-center h-10 px-4 ml-auto text-sm font-medium rounded text-white bg-red-500 hover:bg-gray-300">
                         Logout
                     </button>
