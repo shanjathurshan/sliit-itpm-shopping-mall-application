@@ -31,42 +31,32 @@ const GameCenter = () => {
     return false;
   };
 
-  const tableData = [
+  const GameList = [
     {
       id: 1,
-      name: "Microsoft Surface Pro",
-      color: "White",
-      category: "Laptop PC",
+      name: "GTA Vice City VII",
       price: "$1999",
+      img: "https://i.ytimg.com/vi/Sp1wvWZ_2MQ/maxresdefault.jpg",
     },
     {
       id: 2,
-      name: "Apple MacBook Pro",
-      color: "Silver",
-      category: "Laptop PC",
-      price: "$2499",
+      name: "GTA Vice City VII",
+      price: "$1999",
+      img: "https://i.ytimg.com/vi/Sp1wvWZ_2MQ/maxresdefault.jpg",
     },
     {
-      id: 2,
-      name: "Apple MacBook Pro",
-      color: "Silver",
-      category: "Laptop PC",
-      price: "$2499",
+      id: 3,
+      name: "GTA Vice City VII",
+      price: "$1999",
+      img: "https://i.ytimg.com/vi/Sp1wvWZ_2MQ/maxresdefault.jpg",
     },
     {
-      id: 2,
-      name: "Apple MacBook Pro",
-      color: "Silver",
-      category: "Laptop PC",
-      price: "$2499",
+      id: 4,
+      name: "GTA Vice City VII",
+      price: "$1999",
+      img: "https://i.ytimg.com/vi/Sp1wvWZ_2MQ/maxresdefault.jpg",
     },
-    {
-      id: 2,
-      name: "Apple MacBook Pro",
-      color: "Silver",
-      category: "Laptop PC",
-      price: "$2499",
-    },
+
   ];
 
   return (
@@ -90,9 +80,12 @@ const GameCenter = () => {
         <table className="w-full text-sm text-left rtl:text-right text-gray-500 default:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 default:bg-gray-700 default:text-gray-400">
             <tr>
+            <th scope="col" className="px-6 py-6">
+                #
+              </th>
               <th scope="col" className="px-6 py-6">
                 <div className="flex items-center">
-                  Color
+                  Title
                   <a href="#">
                     <svg
                       className="w-3 h-3 ms-1.5"
@@ -107,13 +100,10 @@ const GameCenter = () => {
                 </div>
               </th>
               <th scope="col" className="px-6 py-6">
-                Color
+                Ticket Amount
               </th>
               <th scope="col" className="px-6 py-6">
-                Category
-              </th>
-              <th scope="col" className="px-6 py-6">
-                Price
+                Image
               </th>
               <th scope="col" className="px-6 py-6 text-red-500 text-center">
                 Action
@@ -121,20 +111,23 @@ const GameCenter = () => {
             </tr>
           </thead>
           <tbody>
-            {tableData.map((data, index) => (
+            {GameList.map((data, index) => (
               <tr
                 key={index}
                 className="bg-white border-b default:bg-gray-800 default:border-gray-700 hover:bg-gray-50 default:hover:bg-gray-600"
               >
+                <td className="px-6 py-4">{index+1}</td>
                 <th
                   scope="row"
                   className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap default:text-white"
                 >
                   {data.name}
                 </th>
-                <td className="px-6 py-4">{data.color}</td>
-                <td className="px-6 py-4">{data.category}</td>
+
                 <td className="px-6 py-4">{data.price}</td>
+                <td className="px-6 py-4">
+                  <img src={data.img} alt="game" className=" w-20 h-20 object-cover rounded-md" />
+                </td>
                 <td className="px-6 py-4 text-right">
                   <div className="flex items-center justify-center">
                     <button className="text-white  bg-green-500 p-2 rounded">

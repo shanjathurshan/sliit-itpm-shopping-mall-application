@@ -12,6 +12,7 @@ import AdminDashboard from './pages/Admin/pages/AdminDashboard/AdminDashboard';
 import GameCenter from './pages/Admin/pages/GameCenter/GameCenter';
 import ErrorPage from "./components/404/ErrorPage";
 import QRcodePage from "./pages/User/QRcode/QRcodePage";
+import GamingRoomBookings from "./pages/Admin/pages/GamingRoomBookings/GamingRoomBookings";
 
 function App() {
   return (
@@ -50,6 +51,7 @@ function App() {
                     <Route path="/" element={<Navigate to="dashboard" />} />
                     <Route path="/dashboard" element={<AdminDashboard />} />
                     <Route path="game-center" element={<GameCenter />} />
+                    <Route path="gaming-room-bookings" element={<GamingRoomBookings />} />
                     <Route path="*" element={<ErrorPage />} />
                   </Routes>
                 </AdminLayout>
