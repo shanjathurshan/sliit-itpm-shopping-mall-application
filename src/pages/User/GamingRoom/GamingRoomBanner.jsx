@@ -1,5 +1,4 @@
 import React from "react";
-import banneImage from "/images/tom-Clancy-ghost-recon.jpeg";
 import Button from "../../../components/Button/Button";
 
 const GamingRoomBanner = () => {
