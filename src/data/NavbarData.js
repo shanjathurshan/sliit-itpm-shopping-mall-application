@@ -23,8 +23,8 @@ const NavbarData = {
       link: "/qr-scan",
     },
     {
-      title: "Careers",
-      link: "/careers",
+      title: "Gaming Room",
+      link: "/gaming-room",
     },
     {
       title: "Admin",

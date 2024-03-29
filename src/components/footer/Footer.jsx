@@ -8,9 +8,9 @@ const Footer = () => {
   };
 
   const services = [
-    "Managed IT Services",
-    "Cloud Services",
-    "Cybersecurity Services",
+    "Shops",
+    "QR Code",
+    "Gaming Room",
     "More Services",
   ];
 
@@ -51,7 +51,7 @@ const Footer = () => {
 
         <div className="col-span-6 md:col-span-6 lg:col-span-4 grid grid-cols-6 md:grid-cols-8 lg:grid-cols-6 *:pt-5 *:md:pt-0 px-4 md:px-0">
           <div className="col-span-4 md:col-span-4 lg:col-span-3">
-            <div className="text-[20px] pb-1 font-medium">Services</div>
+            <div className="text-[20px] pb-1 font-medium">Main Pages</div>
             <ul className="*:text-[16px] *:py-[6px] text-[#414141] font-light">
               {services.map((service, index) => (
                 <li key={index}>{service}</li>
