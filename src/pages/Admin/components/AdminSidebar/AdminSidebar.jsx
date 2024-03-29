@@ -15,6 +15,10 @@ const AdminSidebar = ({children}) => {
         {
             name: 'Game Center',
             link: 'game-center'
+        },
+        {
+            name: 'Gaming Room Bookings',
+            link: 'gaming-room-bookings'
         }
     ]
 
