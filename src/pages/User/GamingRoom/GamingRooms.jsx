@@ -84,6 +84,7 @@ const GamingRooms = () => {
             </div>
           </div>
         ))}
+        
       </div>
     </div>
   );

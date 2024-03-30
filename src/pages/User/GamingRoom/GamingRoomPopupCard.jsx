@@ -8,21 +8,11 @@ const product = {
   name: "Basic Tee 6-Pack ",
   price: "$192",
   rating: 3.9,
-  reviewCount: 117,
-  href: "#",
-  imageSrc:
-    "https://tailwindui.com/img/ecommerce-images/product-quick-preview-02-detail.jpg",
-  imageAlt: "Two each of gray, white, and black shirts arranged on table.",
-  colors: [
-    { name: "White", class: "bg-white", selectedClass: "ring-gray-400" },
-    { name: "Gray", class: "bg-gray-200", selectedClass: "ring-gray-400" },
-    { name: "Black", class: "bg-gray-900", selectedClass: "ring-gray-900" },
-  ],
   sizes: [
-    { name: "XXS", inStock: true },
-    { name: "XS", inStock: true },
-    { name: "XXL", inStock: true },
-    { name: "XXXL", inStock: false },
+    { name: "2-3 PM", inStock: true },
+    { name: "3-4 PM", inStock: true },
+    { name: "4-5 PM", inStock: true },
+    { name: "5-6 PM", inStock: false },
   ],
 };
 
@@ -32,7 +22,6 @@ function classNames(...classes) {
 
 const GamingRoomPopupCard = ({ data }) => {
   const [open, setOpen] = useState(false);
-  const [selectedColor, setSelectedColor] = useState(product.colors[0]);
   const [selectedSize, setSelectedSize] = useState(product.sizes[2]);
 
   const [datas, setDatas] = useState(data);
@@ -152,6 +141,17 @@ const GamingRoomPopupCard = ({ data }) => {
                           </h3>
 
                           <form>
+                          
+<div className="relative">
+ 
+  <input type="date" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full ps-6 p-2.5" placeholder="Select date" />
+  <div className="absolute inset-y-0 end-0 flex items-center p-3.5 pointer-events-none">
+    <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+      <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+    </svg>
+  </div>
+</div>
+
                             
                             {/* Sizes */}
                             <div className="mt-10">
@@ -237,7 +237,7 @@ const GamingRoomPopupCard = ({ data }) => {
                               type="submit"
                               className="mt-6 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                             >
-                              Add to bag
+                              Book the room
                             </button>
                           </form>
                         </section>
