@@ -3,18 +3,31 @@ import {
   PencilSquareIcon,
   PlusCircleIcon,
 } from "@heroicons/react/24/outline";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import GameCenterCreate from "./GameCenterCreate";
 import GameCenterDelete from "./GameCenterDelete";
+import { API_URL } from "../../../../lib/consts";
 
 const GameCenter = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({ title: "", amount: "" });
+  const [gameList, setGameList] = useState([]);
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
 
+  useEffect(() => {
+    fetchData();
+    console.log(gameList);
+  }, []);
+
+  const fetchData = async () => {
+    const response = await fetch(`${API_URL}/games`).then((res) => res.json());
+    // const data = await response.json();
+    setGameList(response);
+    // console.log(response)
+  };
   const handleFormSubmit = (data) => {
     console.log("Form data:", data);
 
@@ -23,10 +36,16 @@ const GameCenter = () => {
     return false;
   };
 
-  const handleOnDelete = (id) => {
-    console.log("delete data:", isModalOpen);
-
+  const handleOnDelete = async (id) => {
     // API will be here
+    const response = await fetch(`${API_URL}/games`,{
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id: id }),
+    }).then((res) => res.json());
+    fetchData();
 
     return false;
   };
@@ -56,7 +75,6 @@ const GameCenter = () => {
       price: "$1999",
       img: "https://i.ytimg.com/vi/Sp1wvWZ_2MQ/maxresdefault.jpg",
     },
-
   ];
 
   return (
@@ -80,7 +98,7 @@ const GameCenter = () => {
         <table className="w-full text-sm text-left rtl:text-right text-gray-500 default:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 default:bg-gray-700 default:text-gray-400">
             <tr>
-            <th scope="col" className="px-6 py-6">
+              <th scope="col" className="px-6 py-6">
                 #
               </th>
               <th scope="col" className="px-6 py-6">
@@ -111,22 +129,30 @@ const GameCenter = () => {
             </tr>
           </thead>
           <tbody>
-            {GameList.map((data, index) => (
+            {gameList.map((data, index) => (
               <tr
                 key={index}
                 className="bg-white border-b default:bg-gray-800 default:border-gray-700 hover:bg-gray-50 default:hover:bg-gray-600"
               >
-                <td className="px-6 py-4">{index+1}</td>
+                <td className="px-6 py-4">{index + 1}</td>
                 <th
                   scope="row"
                   className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap default:text-white"
                 >
-                  {data.name}
+                  {data.title}
                 </th>
 
                 <td className="px-6 py-4">{data.price}</td>
                 <td className="px-6 py-4">
-                  <img src={data.img} alt="game" className=" w-20 h-20 object-cover rounded-md" />
+                  <img
+                    src={data.image}
+                    onError={({ currentTarget }) => {
+                      currentTarget.onerror = null;
+                      currentTarget.src = "/images/thumbnail.svg";
+                    }}
+                    alt={data.image}
+                    className=" w-20 h-20 object-cover rounded-md"
+                  />
                 </td>
                 <td className="px-6 py-4 text-right">
                   <div className="flex items-center justify-center">
@@ -136,7 +162,7 @@ const GameCenter = () => {
                     <GameCenterDelete
                       isOpen={isModalOpen}
                       toggleModal={toggleModal}
-                      onDetele={()=> handleOnDelete(1)}
+                      onDetele={() => handleOnDelete(data._id)}
                     />
                   </div>
                 </td>
