@@ -16,10 +16,10 @@ const GameCenterCreate = ({
     setFormData({ ...formData, [name]: newValue });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const output = onSubmit(formData);
+    const output = await onSubmit(formData);
     setShowModal(output);
   };
 
@@ -121,9 +121,9 @@ const GameCenterCreate = ({
                         </label>
                         <input
                           type="number"
-                          name="amount"
-                          id="amount"
-                          value={formData.amount}
+                          name="price"
+                          id="price"
+                          value={formData.price}
                           onChange={handleChange}
                           className="bg-white border text-sm rounded-lg block w-full p-2.5 default:bg-gray-600 default:border-gray-500 default:placeholder-gray-400 default:text-red"
                           placeholder=""

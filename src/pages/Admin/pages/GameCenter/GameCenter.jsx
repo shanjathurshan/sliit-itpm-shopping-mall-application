@@ -6,11 +6,17 @@ import {
 import React, { useEffect, useState } from "react";
 import GameCenterCreate from "./GameCenterCreate";
 import GameCenterDelete from "./GameCenterDelete";
-import { API_URL } from "../../../../lib/consts";
+import { API_URL, postMultipartData } from "../../../../lib/consts";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const GameCenter = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [formData, setFormData] = useState({ title: "", amount: "" });
+  const [formData, setFormData] = useState({
+    userId: "65ff4f4a3f246e8f5a6efc0a",
+    title: "",
+    price: "",
+  });
   const [gameList, setGameList] = useState([]);
 
   const toggleModal = () => {
@@ -19,26 +25,37 @@ const GameCenter = () => {
 
   useEffect(() => {
     fetchData();
-    console.log(gameList);
   }, []);
 
   const fetchData = async () => {
-    const response = await fetch(`${API_URL}/games`).then((res) => res.json());
-    // const data = await response.json();
-    setGameList(response);
-    // console.log(response)
+    await fetch(`${API_URL}/games`).then((res) => {
+      if(res.status === 200){
+        return res.json();
+      } else {
+        return [];
+      }
+    }).then((res) => {
+      setGameList(res);
+    } );
+
   };
-  const handleFormSubmit = (data) => {
+
+  const handleFormSubmit = async (data) => {
     console.log("Form data:", data);
 
     // API will be here
-
-    return false;
+    await postMultipartData(`/games`, data).then((res) => {
+      if (res.status === 201) {
+        toast("Game added successfully!");
+        fetchData();
+        return false;
+      }
+    });
   };
 
   const handleOnDelete = async (id) => {
     // API will be here
-    const response = await fetch(`${API_URL}/games`,{
+    const response = await fetch(`${API_URL}/games`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -49,33 +66,6 @@ const GameCenter = () => {
 
     return false;
   };
-
-  const GameList = [
-    {
-      id: 1,
-      name: "GTA Vice City VII",
-      price: "$1999",
-      img: "https://i.ytimg.com/vi/Sp1wvWZ_2MQ/maxresdefault.jpg",
-    },
-    {
-      id: 2,
-      name: "GTA Vice City VII",
-      price: "$1999",
-      img: "https://i.ytimg.com/vi/Sp1wvWZ_2MQ/maxresdefault.jpg",
-    },
-    {
-      id: 3,
-      name: "GTA Vice City VII",
-      price: "$1999",
-      img: "https://i.ytimg.com/vi/Sp1wvWZ_2MQ/maxresdefault.jpg",
-    },
-    {
-      id: 4,
-      name: "GTA Vice City VII",
-      price: "$1999",
-      img: "https://i.ytimg.com/vi/Sp1wvWZ_2MQ/maxresdefault.jpg",
-    },
-  ];
 
   return (
     <div>
@@ -93,8 +83,21 @@ const GameCenter = () => {
           setFormData={setFormData}
         />
       </div>
+      <ToastContainer />
 
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+
+      
+        {gameList.length === 0 && (
+          <div className="flex items-center justify-center h-40">
+            <h1 className="text-2xl font-semibold text-gray-800 default:text-white">
+              No games found
+            </h1>
+          </div>
+        )}
+
+        {gameList.length > 0 && (
+          
         <table className="w-full text-sm text-left rtl:text-right text-gray-500 default:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 default:bg-gray-700 default:text-gray-400">
             <tr>
@@ -128,6 +131,7 @@ const GameCenter = () => {
               </th>
             </tr>
           </thead>
+
           <tbody>
             {gameList.map((data, index) => (
               <tr
@@ -142,10 +146,10 @@ const GameCenter = () => {
                   {data.title}
                 </th>
 
-                <td className="px-6 py-4">{data.price}</td>
+                <td className="px-6 py-4">Rs. {data.price}</td>
                 <td className="px-6 py-4">
                   <img
-                    src={data.image}
+                    src={API_URL+'/uploads/'+data.image}
                     onError={({ currentTarget }) => {
                       currentTarget.onerror = null;
                       currentTarget.src = "/images/thumbnail.svg";
@@ -170,6 +174,7 @@ const GameCenter = () => {
             ))}
           </tbody>
         </table>
+        )}
       </div>
     </div>
   );
