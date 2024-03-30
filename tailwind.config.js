@@ -75,9 +75,22 @@ export default {
         "accordion-up": "accordion-up 0.2s ease-out",
       },
     },
+    aspectRatio: {
+      1: '1',
+      2: '2',
+      3: '3',
+      4: '4',
+    }
+  },
+  variants: {
+    aspectRatio: ['responsive', 'hover']
+  },
+  corePlugins: {
+    aspectRatio: false,
   },
   plugins: [
     require('@tailwindcss/forms'),
+    require('@tailwindcss/aspect-ratio')
   ],
 }
 
