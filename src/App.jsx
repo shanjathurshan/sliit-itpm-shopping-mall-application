@@ -14,6 +14,7 @@ import ErrorPage from "./components/404/ErrorPage";
 import QRcodePage from "./pages/User/QRcode/QRcodePage";
 import GamingRoomBookings from "./pages/Admin/pages/GamingRoomBookings/GamingRoomBookings";
 import GamingRoomMain from "./pages/User/GamingRoom/GamingRoomMain";
+import PublicLayoutDark from './components/PublicLayout/PublicLayoutDark';
 
 function App() {
   return (
@@ -35,7 +36,7 @@ function App() {
                     <Route path="/register" element={<RegisterPage />} />
 
                     <Route path="/qr-scan" element={<QRcodePage />} />
-                    <Route path="/gaming-room" element={<GamingRoomMain />} />
+                    {/* <Route path="/gaming-room" element={<GamingRoomMain />} /> */}
 
                     <Route path="*" element={<ErrorPage />} />
 
@@ -43,6 +44,8 @@ function App() {
                 </PublicLayout>
               }
             />
+
+            <Route path="/gaming-room" element={<PublicLayoutDark><GamingRoomMain /></PublicLayoutDark>} />
 
             {/* Admin routes */}
             <Route

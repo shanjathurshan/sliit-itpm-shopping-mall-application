@@ -8,8 +8,9 @@ import {
 const GameCenterDelete = ({ isOpen, toggleModal, onDetele }) => {
   const [showModal, setShowModal] = React.useState(false);
 
-  const handleSubmit = (e) => {
-    const output = onDetele();
+  const handleSubmit = async (e) => {
+    const output = await onDetele();
+    console.log(output)
     setShowModal(output);
   };
 
