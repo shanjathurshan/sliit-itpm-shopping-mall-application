@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Dialog, RadioGroup, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { StarIcon } from "@heroicons/react/20/solid";
@@ -9,10 +9,11 @@ const product = {
   price: "$192",
   rating: 3.9,
   sizes: [
-    { name: "2-3 PM", inStock: true },
+    { name: "2-3 PM", inStock: false },
     { name: "3-4 PM", inStock: true },
-    { name: "4-5 PM", inStock: true },
+    { name: "4-5 PM", inStock: false },
     { name: "5-6 PM", inStock: false },
+    { name: "6-7 PM", inStock: true },
   ],
 };
 
@@ -22,11 +23,45 @@ function classNames(...classes) {
 
 const GamingRoomPopupCard = ({ data }) => {
   const [open, setOpen] = useState(false);
-  const [selectedSize, setSelectedSize] = useState(product.sizes[2]);
-
+  const [selectedSize, setSelectedSize] = useState(null);
+  // const [onDate, setOnDate] = useState(new Date());
+  const [validateMessage, setValidateMessage] = useState("");
   const [datas, setDatas] = useState(data);
 
-  open && console.log(datas);
+  const [formData, setFormData] = useState({
+    userId: "65ff4f4a3f246e8f5a6efc0a",
+    selectedSize: { name: "", inStock: false },
+    date: new Date(),
+  });
+
+  const onChangeDate = e => {
+    // setOnDate(e.target.value);
+    setFormData({
+      ...formData,
+      date: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!selectedSize) {
+      setValidateMessage("Please select a slot*");
+      return;
+    }
+    setValidateMessage("");
+
+    setFormData({
+      ...formData,
+      selectedSize: {
+        name: selectedSize.name,
+        inStock: selectedSize.inStock,
+      }
+    });
+
+    console.log(formData);
+
+  };
 
   return (
     <>
@@ -86,7 +121,7 @@ const GamingRoomPopupCard = ({ data }) => {
                       </div>
                       <div className="sm:col-span-8 lg:col-span-7">
                         <h2 className="text-2xl font-bold text-gray-900 sm:pr-12">
-                        {datas.title}
+                          {datas.title}
                         </h2>
 
                         <section
@@ -140,26 +175,38 @@ const GamingRoomPopupCard = ({ data }) => {
                             Product options
                           </h3>
 
-                          <form>
-                          
-<div className="relative">
- 
-  <input type="date" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full ps-6 p-2.5" placeholder="Select date" />
-  <div className="absolute inset-y-0 end-0 flex items-center p-3.5 pointer-events-none">
-    <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-      <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
-    </svg>
-  </div>
-</div>
+                          <form onSubmit={handleSubmit}>
+                            <div className="relative">
+                              <input
+                                type="date"
+                                name="date"
+                                id="date"
+                                value={formData.date}
+                                onChange={onChangeDate}
+                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full ps-6 p-2.5"
+                                placeholder="Select date"
+                                required
+                              />
+                              <div className="absolute inset-y-0 end-0 flex items-center p-3.5 pointer-events-none">
+                                <svg
+                                  className="w-4 h-4 text-gray-500 dark:text-gray-400"
+                                  aria-hidden="true"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="currentColor"
+                                  viewBox="0 0 20 20"
+                                >
+                                  <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
+                                </svg>
+                              </div>
+                            </div>
 
-                            
                             {/* Sizes */}
                             <div className="mt-10">
                               <div className="flex items-center justify-between">
                                 <h4 className="text-sm font-medium text-gray-900">
-                                  Choose the slot
+                                  Choose the slot 
                                 </h4>
- 
+                                <span className="text-red-500">{validateMessage}</span>
                               </div>
 
                               <RadioGroup

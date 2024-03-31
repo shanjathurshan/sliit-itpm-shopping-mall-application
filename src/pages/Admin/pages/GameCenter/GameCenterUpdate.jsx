@@ -1,13 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Button from "../../../../components/Button/Button";
-import { PlusCircleIcon } from "@heroicons/react/24/outline";
+import { PencilSquareIcon, PlusCircleIcon } from "@heroicons/react/24/outline";
 
-const GameCenterCreate = ({
-  isOpen,
-  onSubmit,
-  formData,
-  setFormData,
-}) => {
+const GameCenterUpdate = ({ isOpen, onSubmit, formData, setFormData, data }) => {
   const [showModal, setShowModal] = React.useState(false);
 
   const handleChange = (e) => {
@@ -15,6 +10,16 @@ const GameCenterCreate = ({
     const newValue = type === "checkbox" ? checked : value;
     setFormData({ ...formData, [name]: newValue });
   };
+
+  useEffect(() => {
+    console.log("second", data)
+    // setFormData(data);
+    // // setFormData({
+    // //   title: "",
+    // //   price: "",
+    // //   image: null,
+    // // });
+  }, [])
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -26,35 +31,38 @@ const GameCenterCreate = ({
       price: "",
       image: null,
     });
-
   };
 
   const handleImageChange = (event) => {
     const fileInput = event.target;
     if (fileInput.files && fileInput.files.length > 0) {
-        const imageFile = fileInput.files[0];
-        // const imageUrl = URL.createObjectURL(imageFile);
-        setFormData({
-            ...formData,
-            image: imageFile
-        });
+      const imageFile = fileInput.files[0];
+      // const imageUrl = URL.createObjectURL(imageFile);
+      setFormData({
+        ...formData,
+        image: imageFile,
+      });
     } else {
-        // No file selected, reset the image and imageFile
-        setFormData({
-            ...formData,
-            image: null,
-        });
+      // No file selected, reset the image and imageFile
+      setFormData({
+        ...formData,
+        image: null,
+      });
     }
-};
+  };
 
   return (
     <>
-      <button
+      {/* <button
         onClick={() => setShowModal(true)}
         className="flex items-center justify-center px-4 py-2 text-white bg-green-500 rounded"
       >
         <PlusCircleIcon className="w-5 h-5" />
         <span className="ms-2">Add New Game</span>
+      </button> */}
+
+      <button onClick={() => setShowModal(true)} className="text-white  bg-green-500 p-2 rounded">
+        <PencilSquareIcon className="w-4 h-4" />
       </button>
 
       {showModal ? (
@@ -66,7 +74,7 @@ const GameCenterCreate = ({
                 {/*header*/}
                 <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t ">
                   <h3 className="text-xl font-semibold text-gray-900 ">
-                    Create games
+                    Update games
                   </h3>
                   <button
                     type="button"
@@ -100,6 +108,7 @@ const GameCenterCreate = ({
                       action="#"
                     >
                       <div>
+                      {formData.title}
                         <label
                           htmlFor="title"
                           className="block mb-2 text-sm font-medium text-gray-900 default:text-white"
@@ -142,7 +151,7 @@ const GameCenterCreate = ({
                           htmlFor="amount"
                           className="block mb-2 text-sm font-medium text-gray-900 default:text-white"
                         >
-                        Upload Image
+                          Upload Image
                         </label>
                         <input
                           type="file"
@@ -165,7 +174,6 @@ const GameCenterCreate = ({
                     </form>
                   </div>
                 </div>
-                
               </div>
             </div>
           </div>
@@ -176,4 +184,4 @@ const GameCenterCreate = ({
   );
 };
 
-export default GameCenterCreate;
+export default GameCenterUpdate;
