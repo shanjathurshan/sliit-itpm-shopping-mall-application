@@ -6,7 +6,7 @@ import {
 import React, { useEffect, useState } from "react";
 import GameCenterCreate from "./GameCenterCreate";
 import GameCenterDelete from "./GameCenterDelete";
-import { API_URL, postMultipartData } from "../../../../lib/consts";
+import { API_URL, patchMultipartData, postMultipartData } from "../../../../lib/consts";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import GameCenterUpdate from "./GameCenterUpdate";
@@ -65,10 +65,12 @@ const GameCenter = () => {
   const handleUpdateFormSubmit = async (data) => {
     console.log("Form data:", data);
 
+    var newData = {...data, id: data._id};
+    console.log("newData : ", newData);
     // API will be here
-    await postMultipartData(`/games`, data).then((res) => {
-      if (res.status === 201) {
-        toast("Game added successfully!");
+    await patchMultipartData(`/games`, newData).then((res) => {
+      if (res.status === 200) {
+        toast("Game updated successfully!");
         fetchData();
         return false;
       }
@@ -180,7 +182,6 @@ const GameCenter = () => {
                   <td className="px-6 py-4 text-right">
                     <div className="flex items-center justify-center">
                       <GameCenterUpdate
-                        isOpen={isModalOpen}
                         toggleModal={toggleModal}
                         onSubmit={handleUpdateFormSubmit}
                         formData={updateFormData}

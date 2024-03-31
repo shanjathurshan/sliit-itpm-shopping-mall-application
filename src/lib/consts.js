@@ -35,4 +35,19 @@ export const postMultipartData = async (endpoint, data) => {
       console.error("Error fetching data:", error);
       throw error;
     }
-  };
+};
+
+export const patchMultipartData = async (endpoint, data) => {
+  try {
+    const response = await axios.patch(API_URL+endpoint, data, {
+      headers: {
+        // Authorization: `Bearer ${LoginAuthToken()}`,
+        "content-type": "multipart/form-data",
+      },
+    });
+    return response;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    throw error;
+  }
+};
