@@ -15,6 +15,8 @@ import QRcodePage from "./pages/User/QRcode/QRcodePage";
 import GamingRoomBookings from "./pages/Admin/pages/GamingRoomBookings/GamingRoomBookings";
 import GamingRoomMain from "./pages/User/GamingRoom/GamingRoomMain";
 import PublicLayoutDark from './components/PublicLayout/PublicLayoutDark';
+import ProfilePage from "./pages/Auth/Profile";
+import ViewUsers from "./pages/Auth/AllUsers";
 
 function App() {
   return (
@@ -37,6 +39,9 @@ function App() {
 
                     <Route path="/qr-scan" element={<QRcodePage />} />
                     {/* <Route path="/gaming-room" element={<GamingRoomMain />} /> */}
+
+                    <Route path="/profile" element={<ProfilePage />} />
+                    <Route path="/users" element={<ViewUsers />} />
 
                     <Route path="*" element={<ErrorPage />} />
 
