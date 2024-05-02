@@ -1,6 +1,35 @@
-import React from "react";
+import React, { useState } from "react";
+import { Form, Button } from "react-bootstrap";
+import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
+
+  const [name, setName] = useState("");
+    const [password, setPassword] = useState("");
+    const [error, setError] = useState("");
+    let navigate = useNavigate(); 
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await axios.post("http://localhost:8080/user/log", { name, password });
+            console.log(response.data); 
+            localStorage.setItem('userData', JSON.stringify(response.data));
+            alert("Logged in Successfully!!!");
+
+            // Check if the role is "Teacher"
+            if (response.data.user.role === "Seller") {
+                navigate('/admin/dashboard'); // Navigate to the teacher page
+            } else {
+                navigate('/'); // Navigate to the home page
+            }
+        } catch (err) {
+            setError("Invalid username or password"); 
+            console.error(err); 
+        }
+    };
+
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -8,10 +37,11 @@ const LoginPage = () => {
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
             Login Account
           </h2>
+          {error && <p className="error-message">{error}</p>}
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form className="space-y-6" action="#" method="POST">
+          <form className="space-y-6" action="#" method="POST" onSubmit={handleSubmit}>
             <div>
               <label
                 htmlFor="email"
@@ -25,6 +55,8 @@ const LoginPage = () => {
                   name="email"
                   type="email"
                   autoComplete="email"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
                   required
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
@@ -45,6 +77,8 @@ const LoginPage = () => {
                   id="password"
                   name="password"
                   type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   autoComplete="current-password"
                   required
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
