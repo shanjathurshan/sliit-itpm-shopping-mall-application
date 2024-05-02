@@ -14,6 +14,11 @@ import ErrorPage from "./components/404/ErrorPage";
 import QRcodePage from "./pages/User/QRcode/QRcodePage";
 import GamingRoomBookings from "./pages/Admin/pages/GamingRoomBookings/GamingRoomBookings";
 import GamingRoomMain from "./pages/User/GamingRoom/GamingRoomMain";
+import PromotionList from "./pages/Admin/pages/Promotion/PromotionList";
+import AddPromotion from "./pages/Admin/pages/Promotion/AddPromotion";
+import ViewQRCode from "./pages/Admin/pages/Promotion/ViewQRCode";
+import PromotionView from "./pages/Admin/pages/Promotion/PromotionView";
+
 
 function App() {
   return (
@@ -52,6 +57,10 @@ function App() {
                   <Routes>
                     <Route path="/" element={<Navigate to="dashboard" />} />
                     <Route path="/dashboard" element={<AdminDashboard />} />
+                    <Route path="/promotion-list" element={<PromotionList />} />
+                    <Route path="/promotion-add" element={<AddPromotion />} />
+                    <Route path="/promotion-qr-code/:id" element={<ViewQRCode />} />
+                    <Route path="/promotion-view/:id" element={<PromotionView />} />
                     <Route path="game-center" element={<GameCenter />} />
                     <Route path="gaming-room-bookings" element={<GamingRoomBookings />} />
                     <Route path="*" element={<ErrorPage />} />
