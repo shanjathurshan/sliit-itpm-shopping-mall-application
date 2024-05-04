@@ -85,7 +85,7 @@ import {
     return (
      
       <div className="">
-        <h1 className="text-center text-3xl my-7 ml-10 font-medium">New Shope</h1>
+        <h1 className="text-center text-3xl my-7 ml-10 font-medium">Add Your Shop</h1>
         <div className="flex justify-center items-center">
   
        
@@ -132,7 +132,7 @@ import {
             <input
               className="bg-white border-none rounded-md w-48 text-slate-800"
               type="text"
-              placeholder="stallNumber"
+              placeholder="StallNumber"
               required
               id="stallNumber"
               maxLength={4}
@@ -142,7 +142,7 @@ import {
                   setFormData({ ...formData, stallNumber: value });
                   setPublishError('');  // Clear any previous error message
                 } else {
-                  setPublishError('StallNumber cannot be negative');  // Set error message
+                  setPublishError('StallNumber can not contain characters!');  // Set error message
                 }
               }}
             />

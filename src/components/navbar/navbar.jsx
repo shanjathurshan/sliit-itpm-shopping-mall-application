@@ -3,10 +3,18 @@ import CompanyLogo from "../CompanyLogo/CompanyLogo";
 import Menu from "./Menu";
 import Button from "../Button/Button";
 import NavbarData from "../../data/NavbarData";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { signoutSuccess } from "../../redux/user/userSilce";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+
+  const { currentUser } = useSelector((state) => state.user);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -27,6 +35,23 @@ const Navbar = () => {
 
   const handleMenuOpen = () => {
     setIsMenuOpen(!isMenuOpen);
+  };
+
+  const handleSignout = async () => {
+    try {
+      const res = await fetch("/api/auth/signout", {
+        method: "POST",
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        console.log(data.message);
+      } else {
+        dispatch(signoutSuccess());
+        navigate("/sign-in");
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 
   return (
@@ -58,17 +83,36 @@ const Navbar = () => {
             <Menu className="hidden md:flex" links={NavbarData?.menuItems} />
           </div>
           <div className="hidden items-center gap-2 md:flex">
+          {currentUser ? (
+            <>
+            
+            <Button onClick={handleSignout}
+                bgColor="transparent linear-gradient(105deg, #e9ad0d 0%, #e15603 100%) 0% 0% no-repeat padding-box"
+                hoverColor="transparent linear-gradient(105deg, #e15603 0%, #e9ad0d 100%) 0% 0% no-repeat padding-box"
+              >
+                LogOut
+              </Button>
+            </>
+            
+          ) : (
+           <>
             <a href={"/employer"} className=" flex gap-2">
+            <Link to="/sign-up">
               <Button
                 bgColor="transparent linear-gradient(105deg, #e9ad0d 0%, #e15603 100%) 0% 0% no-repeat padding-box"
                 hoverColor="transparent linear-gradient(105deg, #e15603 0%, #e9ad0d 100%) 0% 0% no-repeat padding-box"
               >
                 Register
               </Button>
+              </Link>
             </a>
             <a href={"/login"} className=" flex gap-2">
+            <Link to="/sign-in">
               <Button>Login</Button>
+              </Link>
             </a>
+            </>
+          )}
           </div>
 
           <div className="flex md:hidden">

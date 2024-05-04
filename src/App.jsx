@@ -28,6 +28,9 @@ import UpdateBeautyshop from "./pages/User/Shops/UpdateBeautyshop";
 import ProductList from "./pages/User/Shops/ProductList";
 import CreateProduct from "./pages/User/Shops/CreateProduct";
 import Updateproduct from "./pages/User/Shops/Updateproduct";
+import SignIn from "./pages/User/Shops/Singin";
+import SignUp from "./pages/User/Shops/SingUp";
+import OnlyPrivateRoute from "./pages/User/Shops/components/OnlyPrivateRoute";
 
 import PromotionList from "./pages/Admin/pages/Promotion/PromotionList";
 import AddPromotion from "./pages/Admin/pages/Promotion/AddPromotion";
@@ -49,6 +52,11 @@ function App() {
                   <Routes>
                     <Route path="/" element={<HomePage />} />
                     <Route path="/shops" element={<Shops />} />
+                    <Route path="/sign-in" element={<SignIn />} />
+                     <Route path="/sign-up" element={<SignUp />} />
+
+
+                    <Route element={< OnlyPrivateRoute/>}>
                     <Route path="/BeautyShop" element={<BeautyShop />} />
                     <Route path="/BookShop" element={<Bookshop />} />
                     <Route path="/ClothShop" element={<Clothshop />} />
@@ -58,9 +66,10 @@ function App() {
                     <Route path="/update-clothshope/:updateCId" element={<UpdateClothshop />} />
                     <Route path="/createBeauty" element={<CreateBeutyshop />} />
                     <Route path="/update-beautyshope/:updateBId" element={<UpdateBeautyshop />} />
-                    <Route path="/product/:productId/:shoptype" element={<ProductList />} />
+                    <Route path="/product/:productId" element={<ProductList />} />
                     <Route path="/createproduct/:creatId" element={<CreateProduct />} />
                     <Route path="/updateproduct/:updatePId" element={<Updateproduct />} />
+                    </Route>
 
 
                     {/* Auth routes */}

@@ -1,15 +1,16 @@
 import { useEffect, useState } from "react";
-{/**import { useSelector } from "react-redux"; */ }
+import { useSelector } from "react-redux";
+{/**import { useSelector } from "react-redux"; */}
 import { Link } from "react-router-dom";
 
 export default function BeantyShop() {
-  {/**const { currentUser } = useSelector((state) => state.user); */ }
-
+  const { currentUser } = useSelector((state) => state.user); 
+  
 
   const [Form, setform] = useState([]);
   const [showMore, setShowMore] = useState(false);
-
-  {/**const currentuserId = currentUser ? currentUser._id : null; */ }
+  
+  {/**const currentuserId = currentUser ? currentUser._id : null; */}
   console.log("arra", Form);
   const [formId, setformId] = useState("");
   const [filter, setfilter] = useState([]);
@@ -68,7 +69,7 @@ export default function BeantyShop() {
   return (
     <div>
       <div className="flex justify-center items-center text-3xl  mt-4 text-[30px] pb-1 font-medium">
-        <h1>Beauty</h1>
+        <h1>Beauty & Cosmetics Shops</h1>
       </div>
       <div className="ml-8 mt-7 flex justify-center items-center">
         <form>
@@ -79,28 +80,20 @@ export default function BeantyShop() {
             onChange={(e) => setQuery(e.target.value)}
           />
         </form>
-
+      
       </div>
 
-      <span className=" ml-[1108px]">
-        <Link
-          to={"/createBeauty"}
-          className="hidden sm:inline   border hover:bg-gradient-to-r from-orange-300 to-orange-500 hover:text-white  text-slate-600 font-medium  py-3 px-6   rounded-3xl cursor-pointer"
-        >
-          New Shop
-        </Link>
-        <div></div>
-      </span>
+     
       <div>
 
         {/** {currentUser?.isInventManger && (
          
         )}*/}
+        
 
-
-        <>
-
-        </>
+<>
+            
+          </>
 
 
 
@@ -159,55 +152,77 @@ export default function BeantyShop() {
                         </div>
 
                         <div className="flex justify-center items-center mt-20 text-blue-900  text-[18px]  pb-1 font-medium  ">
-                          <Link to={`/product/${formm._id}/beauty`}>
-                            <button className="hover:text-black" >Product List</button>
-                          </Link>
+                        <Link  to={`/product/${formm._id}`}>
+                            <button  className="hover:text-black" >View List</button>
+                            </Link>
                         </div>
+                        {currentUser?.isInventManger && (
 
-                        <Link to={`/createproduct/${formm._id}`}>
-                          <button className="w-10 h-5 font-medium  mb-1 rounded bg-gradient-to-r from-blue-500 to-blue-800 text-white hover:opacity-90" >Add</button>
-                        </Link>
+                        <Link  to={`/createproduct/${formm._id}`}>
+                            <button  className="w-10 h-5 font-medium  mb-1 rounded bg-gradient-to-r from-blue-500 to-blue-800 text-white hover:opacity-90" >Add</button>
+                            </Link>
+                             )}
                       </div>
 
                       {/**  {currentUser?.isInventManger && (
                         
                       )} */}
 
+                     
 
-
-                      <>
-                        <div className="flex justify-center items-center gap-6 mt-6">
-                          <Link
-                            to={`/update-beautyshope/${formm._id}`}
-                            className="hidden sm:inline    hover:bg-gradient-to-r from-blue-500 to-blue-800  bg-opacity-90 hover:text-white  text-blue-900 font-medium  py-1 px-8 border  rounded-xl cursor-pointer"
-                          >
-                            Edit
-                          </Link>
-                          <div>
-                            <span
-                              onClick={() => {
-                                setformId(formm._id);
-                                handleDelete();
-                              }}
-                              className="hidden sm:inline     hover:bg-gradient-to-r from-orange-300 to-orange-500 hover:text-white  bg-opacity-90 text-orange-700 font-medium py-2 px-6 border  rounded-xl cursor-pointer"
+<>
+{currentUser?.isInventManger && (
+                          <div className="flex justify-center items-center gap-6 mt-6">
+                            <Link
+                              to={`/update-beautyshope/${formm._id}`}
+                              className="hidden sm:inline    hover:bg-gradient-to-r from-blue-500 to-blue-800  bg-opacity-90 hover:text-white  text-blue-900 font-medium  py-1 px-8 border  rounded-xl cursor-pointer"
                             >
-                              Delete
-                            </span>
-                          </div>
-                        </div>
-                      </>
+                              Edit
+                            </Link>
+                            <div>
+                              <span
+                                onClick={() => {
+                                  setformId(formm._id);
+                                  handleDelete();
+                                }}
+                                className="hidden sm:inline     hover:bg-gradient-to-r from-orange-300 to-orange-500 hover:text-white  bg-opacity-90 text-orange-700 font-medium py-2 px-6 border  rounded-xl cursor-pointer"
+                              >
+                                Delete
+                              </span>
+                            </div>
+                            </div>
+                             )}
+                        </>
                     </div>
                   </div>
                 ))}
 
-
+                
               </>
             ) : (
               <p>You have no items yet</p>
             )}
           </div>
         </div>
+        {currentUser?.isInventManger && (
+        <div className="flex justify-center items-center mt-8 mb-6">
+        <span className=" ">
+              <Link
+                to={"/createBeauty"}
+                className="hidden sm:inline   border hover:bg-gradient-to-r from-orange-300 to-orange-500 hover:text-white  text-slate-600 font-medium  py-3    rounded-3xl cursor-pointer"
+              >
+                <button className="w-[300px]">
+                Add New Shop
+                </button>
+             
+              </Link>
+              <div></div>
+            </span>
+
+        </div>
+        )}
       </div>
+
     </div>
   );
 }

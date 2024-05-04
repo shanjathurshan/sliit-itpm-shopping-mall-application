@@ -1,23 +1,27 @@
 import { connectStorageEmulator } from "firebase/storage";
 import { useEffect, useState } from "react";
-{/**import { useSelector } from "react-redux"; */ }
+import { useSelector } from "react-redux"; 
 import { Link, useParams } from "react-router-dom";
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
+
 
 export default function ProductList() {
-  {/**const { currentUser } = useSelector((state) => state.user); */ }
-
+ const { currentUser } = useSelector((state) => state.user); 
+  
 
   const [Form, setform] = useState([]);
   const [showMore, setShowMore] = useState(false);
-  console.log("Form", Form)
-
-  {/**const currentuserId = currentUser ? currentUser._id : null; */ }
-
+  console.log("Form",Form)
+  
+  {/**const currentuserId = currentUser ? currentUser._id : null; */}
+ 
   const [formId, setformId] = useState("");
   const [filter, setfilter] = useState([]);
   const [query, setQuery] = useState(" ");
 
-  const { productId, shoptype } = useParams();
+  const { productId } = useParams();
+
 
 
 
@@ -27,7 +31,7 @@ export default function ProductList() {
       try {
         const res = await fetch(`/api/product/getproduct/${productId}`);
         const data = await res.json();
-        console.log("DATA", data);
+        console.log("DATA",data);
 
         if (res.ok) {
           setform(data);
@@ -40,7 +44,7 @@ export default function ProductList() {
     fetchform();
   }, [productId])
 
-
+  
 
   //search funtion
   useEffect(() => {
@@ -74,12 +78,46 @@ export default function ProductList() {
     }
   };
 
+
+
+  const generatePDF = () => {
+    const doc = new jsPDF();
+    const tableData = [];
+    
+    // Prepare table data from your component's state or props
+    filter.forEach((formm) => {
+      tableData.push([
+        formm.title,
+        formm.quntity,
+        formm.price,
+        formm.desc
+        // Add more fields as needed
+      ]);
+    });
+  
+    // Set up the table headers
+    const headers = ['Title', 'Quantity', 'Price', 'Description'];
+    
+    // Add the table to the PDF document
+    doc.autoTable({ head: [headers], body: tableData });
+
+   
+  
+    // Save the PDF document
+    doc.save('product_report.pdf');
+  };
+  
+
   return (
     <div>
       <div className="flex justify-center items-center text-3xl text-gray-700  mt-4 text-[30px] pb-1 font-medium">
         <h1 className="text-gray-600">Product</h1>
+        
+
       </div>
+
       <div className="ml-8 mt-7 flex justify-center items-center">
+
         <form>
           <input
             type="text"
@@ -88,20 +126,23 @@ export default function ProductList() {
             onChange={(e) => setQuery(e.target.value)}
           />
         </form>
-
+      
       </div>
 
+     
+    
 
+      
       <div>
 
         {/** {currentUser?.isInventManger && (
          
         )}*/}
+        
 
-
-        <>
-
-        </>
+<>
+            
+          </>
 
 
 
@@ -122,7 +163,7 @@ export default function ProductList() {
                         />
                       </div>
 
-                      <div className=" border  rounded-3xl mt-6 h-44  bg-white bg-opacity-50 ">
+                      <div className=" border  rounded-3xl mt-6 h-44 shadow-md  bg-white bg-opacity-50 ">
                         <div className="flex gap-4 ml-4">
                           <div className="font-extralight text-md">Title:</div>
 
@@ -151,7 +192,7 @@ export default function ProductList() {
 
                         <div className="flex gap-4 ml-4">
                           <div className="font-extralight text-md">
-                            Dsescription:
+                          Dsescription:
                           </div>
 
                           <div className=" text-md mb-2 max-w-[200px] font-extralight break-words">
@@ -159,56 +200,56 @@ export default function ProductList() {
                           </div>
                         </div>
 
+                       
 
-
-
+                        
                       </div>
 
                       {/**  {currentUser?.isInventManger && (
                         
                       )} */}
 
+                     
 
-
-                      <>
-                        <div className="flex justify-center items-center gap-6 mt-6">
-                          <Link
-                            to={`/updateproduct/${formm._id}`}
-                            className="hidden sm:inline    hover:bg-gradient-to-r from-blue-500 to-blue-800  bg-opacity-90 hover:text-white  text-blue-900 font-medium  py-1 px-8 border  rounded-xl cursor-pointer"
-                          >
-                            Edit
-                          </Link>
-                          <div>
-                            <span
-                              onClick={() => {
-                                setformId(formm._id);
-                                handleDelete();
-                              }}
-                              className="hidden sm:inline     hover:bg-gradient-to-r from-orange-300 to-orange-500 hover:text-white  bg-opacity-90 text-orange-700 font-medium py-2 px-6 border  rounded-xl cursor-pointer"
+<>
+{currentUser?.isInventManger && (
+                          <div className="flex justify-center items-center gap-6 mt-6">
+                            <Link
+                              to={`/updateproduct/${formm._id}`}
+                              className="hidden sm:inline    hover:bg-gradient-to-r from-blue-500 to-blue-800  bg-opacity-90 hover:text-white  text-blue-900 font-medium  py-1 px-8 border  rounded-xl cursor-pointer"
                             >
-                              Delete
-                            </span>
-                          </div>
-                          <Link
-                            to={`/admin/promotion-add/${formm._id}/${productId}/${shoptype}`}
-                            className="hidden sm:inline    hover:bg-gradient-to-r from-blue-500 to-blue-800  bg-opacity-90 hover:text-white  text-blue-500 font-medium  py-1 px-8 border  rounded-xl cursor-pointer"
-                          >
-                            Promotion
-                          </Link>
-                        </div>
-                      </>
+                              Edit
+                            </Link>
+                            <div>
+                              <span
+                                onClick={() => {
+                                  setformId(formm._id);
+                                  handleDelete();
+                                }}
+                                className="hidden sm:inline     hover:bg-gradient-to-r from-orange-300 to-orange-500 hover:text-white  bg-opacity-90 text-orange-700 font-medium py-2 px-6 border  rounded-xl cursor-pointer"
+                              >
+                                Delete
+                              </span>
+                            </div>
+                            </div>
+)}
+                        </>
                     </div>
                   </div>
                 ))}
 
-
+                
               </>
             ) : (
               <p>You have no items yet</p>
             )}
           </div>
         </div>
+        <div className="flex justify-center items-center mt-20 mb-5">
+      <button className="text-md font-medium hover:bg-opacity-90    w-48 h-10 whitespace-nowrap rounded-full bg-blue-600 text-white mb-3" onClick={generatePDF}>Generate PDF Report</button>
       </div>
+      </div>
+     
     </div>
   );
 }

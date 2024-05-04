@@ -6,6 +6,7 @@ import book from './routes/bookshop.route.js';
 import cloth from './routes/cloth.route.js';
 import product from './routes/product.rotue.js';
 import promotionRoute from './routes/Promotion.route.js';
+import authRoutes from './routes/auth.route.js';
 dotenv.config();
 
 
@@ -41,7 +42,8 @@ app.use('/api/beauty', beauty);
 app.use('/api/book', book);
 app.use('/api/cloth', cloth);
 app.use('/api/product', product);
-app.use('/api/promotion', promotionRoute)
+app.use('/api/promotion', promotionRoute);
+app.use('/api/auth', authRoutes);
 
 
 app.use((err, req, res, next) => {
