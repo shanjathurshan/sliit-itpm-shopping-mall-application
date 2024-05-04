@@ -15,10 +15,25 @@ import QRcodePage from "./pages/User/QRcode/QRcodePage";
 import GamingRoomBookings from "./pages/Admin/pages/GamingRoomBookings/GamingRoomBookings";
 import GamingRoomMain from "./pages/User/GamingRoom/GamingRoomMain";
 import PublicLayoutDark from './components/PublicLayout/PublicLayoutDark';
+
+import BeautyShop from "./pages/User/Shops/BeautyShop";
+import Bookshop from "./pages/User/Shops/Bookshop";
+import Clothshop from "./pages/User/Shops/Clothshop";
+import Createshop from "./pages/User/Shops/Createshop";
+import UpdatebookShop from "./pages/User/Shops/UpdatebookShop";
+import CreateClothshop from "./pages/User/Shops/CreateClothshop";
+import UpdateClothshop from "./pages/User/Shops/UpdateClothshop";
+import CreateBeutyshop from "./pages/User/Shops/CreateBeutyshop";
+import UpdateBeautyshop from "./pages/User/Shops/UpdateBeautyshop";
+import ProductList from "./pages/User/Shops/ProductList";
+import CreateProduct from "./pages/User/Shops/CreateProduct";
+import Updateproduct from "./pages/User/Shops/Updateproduct";
+
 import PromotionList from "./pages/Admin/pages/Promotion/PromotionList";
 import AddPromotion from "./pages/Admin/pages/Promotion/AddPromotion";
 import ViewQRCode from "./pages/Admin/pages/Promotion/ViewQRCode";
 import PromotionView from "./pages/Admin/pages/Promotion/PromotionView";
+import EditPromotion from "./pages/Admin/pages/Promotion/EditPromotion";
 
 function App() {
   return (
@@ -32,7 +47,7 @@ function App() {
               element={
                 <PublicLayout>
                   <Routes>
-                  <Route path="/" element={<HomePage />} />
+                    <Route path="/" element={<HomePage />} />
                     <Route path="/shops" element={<Shops />} />
                     <Route path="/BeautyShop" element={<BeautyShop />} />
                     <Route path="/BookShop" element={<Bookshop />} />
@@ -70,7 +85,7 @@ function App() {
               element={
                 <AdminLayout>
                   <Routes>
-                  <Route path="/" element={<Navigate to="dashboard" />} />
+                    <Route path="/" element={<Navigate to="dashboard" />} />
                     <Route path="/dashboard" element={<AdminDashboard />} />
                     <Route path="game-center" element={<GameCenter />} />
                     <Route path="gaming-room-bookings" element={<GamingRoomBookings />} />

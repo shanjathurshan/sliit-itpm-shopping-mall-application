@@ -10,15 +10,18 @@ function AddPromotion() {
         itemName: "",
         itemId: "",
         itemImage: "",
-        shopName: "",
-        stallNumber: undefined,
-        floorNumber: undefined,
         oldPrice: "",
         discountRate: "",
         newPrice: "",
         startDate: "",
         endDate: ""
     });
+
+    const [shop, setShop] = useState({
+        shopName: "",
+        floorNumber: undefined,
+        stallNumber: undefined
+    })
 
     const onSubmit = async (e) => {
         e.preventDefault();
@@ -28,7 +31,18 @@ function AddPromotion() {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify(promotion),
+                body: JSON.stringify({
+                    itemName: promotion.itemName,
+                    itemImage: promotion.itemImage,
+                    oldPrice: promotion.oldPrice,
+                    shopName: shop.shopName,
+                    stallNumber: shop.stallNumber,
+                    floorNumber: shop.floorNumber,
+                    discountRate: promotion.discountRate,
+                    newPrice: promotion.newPrice,
+                    startDate: promotion.startDate,
+                    endDate: promotion.endDate
+                }),
             });
             const data = await res.json();
             if (!res.ok) {
@@ -55,6 +69,26 @@ function AddPromotion() {
     };
 
     useEffect(() => {
+        const getShop = async () => {
+            try {
+                const res = await fetch(`/api/${shoptype}/${shopId}`);
+                const data = await res.json();
+                if (res.ok) {
+                    setShop({
+                        ...shop,
+                        shopName: data.name,
+                        floorNumber: data.FloorNumber,
+                        stallNumber: data.stallNumber,
+                    })
+                }
+            } catch (error) {
+                console.log(error.message);
+            }
+        };
+        getShop();
+    }, [shopId, shoptype])
+
+    useEffect(() => {
         const getProduct = async () => {
             try {
                 const res = await fetch(`/api/product/product/${productId}`);
@@ -77,26 +111,6 @@ function AddPromotion() {
     }, [productId])
 
     useEffect(() => {
-        const getShop = async () => {
-            try {
-                const res = await fetch(`/api/${shoptype}/${shopId}`);
-                const data = await res.json();
-                if (res.ok) {
-                    setPromotion({
-                        ...promotion,
-                        floorNumber: data.FloorNumber,
-                        stallNumber: data.stallNumber,
-                        shopName: data.name
-                    })
-                }
-            } catch (error) {
-                console.log(error.message);
-            }
-        };
-        getShop();
-    }, [shopId, shoptype])
-
-    useEffect(() => {
         setPromotion({
             ...promotion,
             newPrice: `${Number(promotion?.oldPrice) - Number((Number(promotion?.oldPrice) * Number(promotion?.discountRate) / 100))}`
@@ -115,9 +129,9 @@ function AddPromotion() {
                             type="text"
                             id="shopName"
                             disabled
-                            value={promotion?.shopName}
+                            value={shop?.shopName}
                             onChange={(e) => {
-                                setPromotion({ ...promotion, shopName: e.target.value });
+                                setShop({ ...shop, shopName: e.target.value });
                             }}
                             name="shopName"
                             class="form-input mt-1 block w-full rounded-md border-gray-300"
@@ -132,10 +146,10 @@ function AddPromotion() {
                             type="text"
                             id="stallNumber"
                             name="stallNumber"
-                            value={promotion?.stallNumber}
+                            value={shop?.stallNumber}
                             disabled
                             onChange={(e) => {
-                                setPromotion({ ...promotion, stallNumber: e.target.value });
+                                setShop({ ...shop, stallNumber: e.target.value });
                             }}
                             class="form-input mt-1 block w-full rounded-md border-gray-300"
                             placeholder="Enter Stall Number"
@@ -149,9 +163,9 @@ function AddPromotion() {
                             type="text"
                             id="floorNumber"
                             disabled
-                            value={promotion?.floorNumber}
+                            value={shop?.floorNumber}
                             onChange={(e) => {
-                                setPromotion({ ...promotion, floorNumber: e.target.value });
+                                setShop({ ...shop, floorNumber: e.target.value });
                             }}
                             name="floorNumber"
                             class="form-input mt-1 block w-full rounded-md border-gray-300"
@@ -174,103 +188,95 @@ function AddPromotion() {
                         placeholder="Enter Item Name"
                     />
                 </div>
-                {promotion?.itemName !== "" && promotion?.itemName !== "Select Item" ? <>
-                    <div class="mb-4">
-                        <label for="itemImage" class="block text-gray-700">Item Image</label>
-                        <img src={promotion?.itemImage} alt="item" style={{ height: '200px', objectFit: 'cover', marginLeft: '40px' }} />
+
+                <div class="mb-4">
+                    <label for="itemImage" class="block text-gray-700">Item Image</label>
+                    <img src={promotion?.itemImage} alt="item" style={{ height: '200px', objectFit: 'cover', marginLeft: '40px' }} />
+                </div>
+
+                <div class="flex gap-4 mb-4">
+
+                    <div class="flex-1">
+                        <label for="oldPrice" class="block text-gray-700">Current Price</label>
+                        <input
+                            type="text"
+                            id="oldPrice"
+                            disabled
+                            value={promotion?.oldPrice}
+                            onChange={(e) => {
+                                setPromotion({ ...promotion, oldPrice: e.target.value });
+                            }}
+                            name="oldPrice"
+                            class="form-input mt-1 block w-full rounded-md border-gray-300"
+                            placeholder="Enter Current Price"
+                        />
                     </div>
 
-                    <div class="flex gap-4 mb-4">
 
-                        <div class="flex-1">
-                            <label for="oldPrice" class="block text-gray-700">Current Price</label>
-                            <input
-                                type="text"
-                                id="oldPrice"
-                                disabled
-                                value={promotion?.oldPrice}
-                                onChange={(e) => {
-                                    setPromotion({ ...promotion, oldPrice: e.target.value });
-                                }}
-                                name="oldPrice"
-                                class="form-input mt-1 block w-full rounded-md border-gray-300"
-                                placeholder="Enter Current Price"
-                            />
-                        </div>
-
-
-                        <div class="flex-1">
-                            <label for="discountRate" class="block text-gray-700">Discount Rate (%)</label>
-                            <input
-                                type="text"
-                                id="discountRate"
-                                name="discountRate"
-                                value={promotion?.discountRate}
-                                onChange={(e) => {
-                                    setPromotion({ ...promotion, discountRate: e.target.value });
-                                }}
-                                class="form-input mt-1 block w-full rounded-md border-gray-300"
-                                placeholder="Enter Discount Rate"
-                            />
-                        </div>
-
-
-                        <div class="flex-1">
-                            <label for="newPrice" class="block text-gray-700">New Price</label>
-                            <input
-                                type="text"
-                                id="newPrice"
-                                disabled
-                                value={promotion?.newPrice}
-                                onChange={(e) => {
-                                    setPromotion({ ...promotion, newPrice: e.target.value });
-                                }}
-                                name="newPrice"
-                                class="form-input mt-1 block w-full rounded-md border-gray-300"
-                                placeholder=" New Price"
-                            />
-                        </div>
+                    <div class="flex-1">
+                        <label for="discountRate" class="block text-gray-700">Discount Rate (%)</label>
+                        <input
+                            type="text"
+                            id="discountRate"
+                            name="discountRate"
+                            value={promotion?.discountRate}
+                            onChange={(e) => {
+                                setPromotion({ ...promotion, discountRate: e.target.value });
+                            }}
+                            class="form-input mt-1 block w-full rounded-md border-gray-300"
+                            placeholder="Enter Discount Rate"
+                        />
                     </div>
 
-                    <div class="flex gap-4 mb-6">
 
-                        <div class="flex-1">
-                            <label for="startDate" class="block text-gray-700">Start Date</label>
-                            <input
-                                type="date"
-                                id="startDate"
-                                name="startDate"
-                                value={promotion?.startDate}
-                                onChange={(e) => {
-                                    setPromotion({ ...promotion, startDate: e.target.value });
-                                }}
-                                class="form-input mt-1 block w-full rounded-md border-gray-300"
-                            />
-                        </div>
-
-
-                        <div class="flex-1">
-                            <label for="endDate" class="block text-gray-700">End Date</label>
-                            <input
-                                type="date"
-                                id="endDate"
-                                name="endDate"
-                                value={promotion?.endDate}
-                                onChange={(e) => {
-                                    setPromotion({ ...promotion, endDate: e.target.value });
-                                }}
-                                class="form-input mt-1 block w-full rounded-md border-gray-300"
-                            />
-                        </div>
+                    <div class="flex-1">
+                        <label for="newPrice" class="block text-gray-700">New Price</label>
+                        <input
+                            type="text"
+                            id="newPrice"
+                            disabled
+                            value={promotion?.newPrice}
+                            onChange={(e) => {
+                                setPromotion({ ...promotion, newPrice: e.target.value });
+                            }}
+                            name="newPrice"
+                            class="form-input mt-1 block w-full rounded-md border-gray-300"
+                            placeholder=" New Price"
+                        />
                     </div>
-                </>
-                    :
-                    <>
-                        <div class="bg-yellow-500 text-black p-4 rounded-md mt-4 mb-5" role="alert">
-                            <p class="font-bold">Please select an item to add promotion</p>
-                        </div>
-                    </>
-                }
+                </div>
+
+                <div class="flex gap-4 mb-6">
+
+                    <div class="flex-1">
+                        <label for="startDate" class="block text-gray-700">Start Date</label>
+                        <input
+                            type="date"
+                            id="startDate"
+                            name="startDate"
+                            value={promotion?.startDate}
+                            onChange={(e) => {
+                                setPromotion({ ...promotion, startDate: e.target.value });
+                            }}
+                            class="form-input mt-1 block w-full rounded-md border-gray-300"
+                        />
+                    </div>
+
+
+                    <div class="flex-1">
+                        <label for="endDate" class="block text-gray-700">End Date</label>
+                        <input
+                            type="date"
+                            id="endDate"
+                            name="endDate"
+                            value={promotion?.endDate}
+                            onChange={(e) => {
+                                setPromotion({ ...promotion, endDate: e.target.value });
+                            }}
+                            class="form-input mt-1 block w-full rounded-md border-gray-300"
+                        />
+                    </div>
+                </div>
 
                 <div class="flex justify-center">
                     <button type="submit" class="px-16 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600" >Add Promotion</button>
