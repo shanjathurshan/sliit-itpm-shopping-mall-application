@@ -1,7 +1,8 @@
 
-import React, { useState } from "react";
-import GameBookingCancel from "../GamingRoomBookings/GameBookingCancel";
-import { PrinterIcon } from "@heroicons/react/24/outline";
+import React, { useEffect, useState } from "react";
+import GameBookingCancel from "./PromotionCancel";
+import { PrinterIcon, PencilIcon, EyeIcon } from "@heroicons/react/24/outline";
+import axios from "axios";
 
 const PromotionList = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -10,23 +11,43 @@ const PromotionList = () => {
         setIsModalOpen(!isModalOpen);
     };
 
-    const handleOnDelete = (id) => {
-        console.log("delete data:", isModalOpen);
-
-        // API will be here
+    const handleDelete = async (id) => {
+        try {
+            const res = await fetch(`/api/promotion/${id}`, {
+                method: "DELETE",
+            });
+            const data = await res.json();
+            if (res.ok) {
+                alert("Deleted Successfully");
+                toggleModal()
+                window.location.reload();
+            } else {
+                console.log(data.message);
+            }
+        } catch (error) {
+            console.log(error.message);
+        }
 
         return false;
     };
 
-    const tableData = [
-        {
-            id: 1,
-            title: "GTA Vice City VII",
-            discount: "10%",
-            startdate: "2024-04-12 12:00 PM",
-            enddate: "2024-04-12 12:00 PM"
-        }
-    ];
+    const [promotions, setPromotions] = useState([]);
+
+    useEffect(() => {
+        const getPromotion = async () => {
+            try {
+                const res = await fetch(`/api/promotion`);
+                const data = await res.json();
+                if (res.ok) {
+                    setPromotions(data)
+                }
+            } catch (error) {
+                console.log(error.message);
+            }
+        };
+
+        getPromotion();
+    }, [])
 
     return (
         <div>
@@ -38,11 +59,7 @@ const PromotionList = () => {
             </div>
 
             <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-                <div style={{ float: 'right', marginRight: '20px', marginBottom: '10px' }}>
-                    <button onClick={() => { window.location.replace("/admin/promotion-add") }} style={{ backgroundColor: 'black', color: 'white', padding: '5px' }}>
-                        Add New
-                    </button>
-                </div>
+
                 <table className="w-full text-sm text-left rtl:text-right text-gray-500 default:text-gray-400">
                     <thead className="text-xs text-gray-700 uppercase bg-gray-50 default:bg-gray-700 default:text-gray-400">
                         <tr>
@@ -50,10 +67,16 @@ const PromotionList = () => {
                                 Id
                             </th>
                             <th scope="col" className="px-6 py-6">
-                                Title
+                                item Name
                             </th>
                             <th scope="col" className="px-6 py-6">
-                                Discount
+                                Old Price
+                            </th>
+                            <th scope="col" className="px-6 py-6">
+                                Discount (%)
+                            </th>
+                            <th scope="col" className="px-6 py-6">
+                                New Price
                             </th>
                             <th scope="col" className="px-6 py-6">
                                 Start Date
@@ -67,30 +90,45 @@ const PromotionList = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {tableData.map((data, index) => (
+                        {promotions.map((data, index) => (
                             <tr
                                 key={index}
                                 className="bg-white border-b default:bg-gray-800 default:border-gray-700 hover:bg-gray-50 default:hover:bg-gray-600"
                             >
                                 <td className="px-6 py-4">{index + 1}</td>
-                                <td className="px-6 py-4">{data.title}</td>
+                                <td className="px-6 py-4">{data.itemName}</td>
+                                <td className="px-6 py-4">{Number(data.oldPrice)?.toFixed(2)}</td>
                                 <th
                                     scope="row"
                                     className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap default:text-white"
                                 >
-                                    {data.discount}
+                                    {data.discountRate}%
                                 </th>
-                                <td className="px-6 py-4">{data.startdate}</td>
-                                <td className="px-6 py-4">{data.enddate}</td>
+                                <td className="px-6 py-4">{Number(data.newPrice)?.toFixed(2)}</td>
+                                <td className="px-6 py-4">{data.startDate}</td>
+                                <td className="px-6 py-4">{data.endDate}</td>
                                 <td className="px-6 py-4 text-right">
                                     <div className="flex items-center justify-center">
+
+                                        <button
+                                            onClick={() => window.location.replace(`/admin/promotion-view/${data?._id}/list`)}
+                                            className="text-white bg-blue-500 ms-5 p-2 rounded"
+                                        >
+                                            <EyeIcon className="w-4 h-4" />
+                                        </button>
+                                        <button
+                                            onClick={() => window.location.replace(`/admin/promotion-edit/${data?._id}`)}
+                                            className="text-white bg-orange-500 ms-5 p-2 rounded"
+                                        >
+                                            <PencilIcon className="w-4 h-4" />
+                                        </button>
                                         <GameBookingCancel
                                             isOpen={isModalOpen}
                                             toggleModal={toggleModal}
-                                            onDetele={() => handleOnDelete(1)}
+                                            onDetele={() => handleDelete(data?._id)}
                                         />
                                         <button
-                                            onClick={() => window.location.replace('/admin/promotion-qr-code/1')}
+                                            onClick={() => window.location.replace(`/admin/promotion-qr-code/${data?._id}`)}
                                             className="text-white bg-green-500 ms-5 p-2 rounded"
                                         >
                                             <PrinterIcon className="w-4 h-4" />

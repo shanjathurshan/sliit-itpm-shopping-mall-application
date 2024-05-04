@@ -32,8 +32,21 @@ function App() {
               element={
                 <PublicLayout>
                   <Routes>
-                    <Route path="/" element={<HomePage />} />
+                  <Route path="/" element={<HomePage />} />
                     <Route path="/shops" element={<Shops />} />
+                    <Route path="/BeautyShop" element={<BeautyShop />} />
+                    <Route path="/BookShop" element={<Bookshop />} />
+                    <Route path="/ClothShop" element={<Clothshop />} />
+                    <Route path="/Createshop" element={<Createshop />} />
+                    <Route path="/update-Bookshope/:updateId" element={<UpdatebookShop />} />
+                    <Route path="/crateclothshop" element={<CreateClothshop />} />
+                    <Route path="/update-clothshope/:updateCId" element={<UpdateClothshop />} />
+                    <Route path="/createBeauty" element={<CreateBeutyshop />} />
+                    <Route path="/update-beautyshope/:updateBId" element={<UpdateBeautyshop />} />
+                    <Route path="/product/:productId/:shoptype" element={<ProductList />} />
+                    <Route path="/createproduct/:creatId" element={<CreateProduct />} />
+                    <Route path="/updateproduct/:updatePId" element={<Updateproduct />} />
+
 
                     {/* Auth routes */}
                     <Route path="/login" element={<LoginPage />} />
@@ -57,15 +70,16 @@ function App() {
               element={
                 <AdminLayout>
                   <Routes>
-                    <Route path="/" element={<Navigate to="dashboard" />} />
+                  <Route path="/" element={<Navigate to="dashboard" />} />
                     <Route path="/dashboard" element={<AdminDashboard />} />
-                    <Route path="/promotion-list" element={<PromotionList />} />
-                    <Route path="/promotion-add" element={<AddPromotion />} />
-                    <Route path="/promotion-qr-code/:id" element={<ViewQRCode />} />
-                    <Route path="/promotion-view/:id" element={<PromotionView />} />
                     <Route path="game-center" element={<GameCenter />} />
                     <Route path="gaming-room-bookings" element={<GamingRoomBookings />} />
                     <Route path="*" element={<ErrorPage />} />
+                    <Route path="/promotion-list" element={<PromotionList />} />
+                    <Route path="/promotion-add/:productId/:shopId/:shoptype" element={<AddPromotion />} />
+                    <Route path="/promotion-edit/:promotionId" element={<EditPromotion />} />
+                    <Route path="/promotion-qr-code/:id" element={<ViewQRCode />} />
+                    <Route path="/promotion-view/:promotionId/:location" element={<PromotionView />} />
                   </Routes>
                 </AdminLayout>
               }

@@ -28,7 +28,7 @@ function ViewQRCode() {
 
     useEffect(() => {
         if (id) {
-            setUrl(`http://localhost:5173/admin/promotion-view/${id}`)
+            setUrl(`http://localhost:5173/admin/promotion-view/${id}/qr`)
         }
     }, [id])
 
