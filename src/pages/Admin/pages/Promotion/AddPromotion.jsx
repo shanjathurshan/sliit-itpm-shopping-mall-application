@@ -23,6 +23,7 @@ function AddPromotion() {
         stallNumber: undefined
     })
 
+    //add promotion api call
     const onSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -68,6 +69,7 @@ function AddPromotion() {
         }
     };
 
+    //get shop by id
     useEffect(() => {
         const getShop = async () => {
             try {
@@ -88,6 +90,8 @@ function AddPromotion() {
         getShop();
     }, [shopId, shoptype])
 
+
+//get product by id
     useEffect(() => {
         const getProduct = async () => {
             try {
@@ -110,12 +114,18 @@ function AddPromotion() {
         getProduct();
     }, [productId])
 
+    // calculate new price
     useEffect(() => {
-        setPromotion({
-            ...promotion,
-            newPrice: `${Number(promotion?.oldPrice) - Number((Number(promotion?.oldPrice) * Number(promotion?.discountRate) / 100))}`
-        })
-    }, [promotion?.discountRate])
+        if(Number(promotion?.discountRate) < 0){
+            setPromotion({...promotion, discountRate: 0})
+        }
+        else{
+         setPromotion({
+             ...promotion,
+             newPrice: `${Number(promotion?.oldPrice) - Number((Number(promotion?.oldPrice) * Number(promotion?.discountRate) / 100))}`
+         })
+        }
+     }, [promotion?.discountRate])
 
     return (
         <div class="max-w-xl mx-auto bg-white shadow-lg rounded-md p-6">
@@ -255,6 +265,7 @@ function AddPromotion() {
                             id="startDate"
                             name="startDate"
                             value={promotion?.startDate}
+                            min={new Date().toISOString().split('T')[0]}
                             onChange={(e) => {
                                 setPromotion({ ...promotion, startDate: e.target.value });
                             }}
@@ -269,6 +280,7 @@ function AddPromotion() {
                             type="date"
                             id="endDate"
                             name="endDate"
+                            min={new Date().toISOString().split('T')[0]}
                             value={promotion?.endDate}
                             onChange={(e) => {
                                 setPromotion({ ...promotion, endDate: e.target.value });

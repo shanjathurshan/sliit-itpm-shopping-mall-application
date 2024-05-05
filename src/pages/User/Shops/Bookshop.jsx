@@ -70,7 +70,7 @@ export default function Beanty() {
       <div className="flex justify-center items-center text-3xl  mt-4 text-[30px] pb-1 font-medium">
         <h1>Book Shops</h1>
       </div>
-      <div className="ml-8 mt-7 flex justify-center items-center">
+      <div className="flex items-center justify-center ml-8 mt-7">
         <form>
           <input
             type="text"
@@ -106,14 +106,14 @@ export default function Beanty() {
                     className="w-[400px] h-[520px] mt-10 mb-2 rounded-xl border-none bg-white "
                   >
                     <div className="px-6 py-4">
-                      <div className="flex justify-center items-center ">
+                      <div className="flex items-center justify-center ">
                         <img
-                          className="w-36 h-36 rounded-full  object-cover"
+                          className="object-cover rounded-full w-36 h-36"
                           src={formm.image}
                         />
                       </div>
 
-                      <div className=" border  rounded-3xl mt-6 h-64  bg-white bg-opacity-50 ">
+                      <div className="h-64 mt-6 bg-white bg-opacity-50 border  rounded-3xl">
                         <div className="flex gap-4 ml-4">
                           <div className="font-extralight text-md">Name:</div>
 
@@ -151,14 +151,14 @@ export default function Beanty() {
                         </div>
 
                         <div className="flex justify-center items-center mt-20 text-blue-900  text-[18px]  pb-1 font-medium  ">
-                          <Link  to={`/product/${formm._id}`}>
+                          <Link  to={`/product/${formm._id}/book`}>
                             <button  className="hover:text-black" >View List</button>
                             </Link>
                           
                         </div>
                         {currentUser?.isInventManger && (
                         <Link  to={`/createproduct/${formm._id}`}>
-                            <button  className="w-10 h-5 font-medium  mb-1 rounded bg-gradient-to-r from-blue-500 to-blue-800 text-white hover:opacity-90" >Add</button>
+                            <button  className="w-10 h-5 mb-1 font-medium text-white rounded bg-gradient-to-r from-blue-500 to-blue-800 hover:opacity-90" >Add</button>
                             </Link>
                             )}
                       </div>
@@ -172,10 +172,10 @@ export default function Beanty() {
 
 <>
 {currentUser?.isInventManger && (
-                          <div className="flex justify-center items-center gap-6 mt-6">
+                          <div className="flex items-center justify-center gap-6 mt-6">
                             <Link
                               to={`/update-Bookshope/${formm._id}`}
-                              className="hidden sm:inline    hover:bg-gradient-to-r from-blue-500 to-blue-800  bg-opacity-90 hover:text-white  text-blue-900 font-medium  py-1 px-8 border  rounded-xl cursor-pointer"
+                              className="hidden px-8 py-1 font-medium text-blue-900 border cursor-pointer sm:inline hover:bg-gradient-to-r from-blue-500 to-blue-800 bg-opacity-90 hover:text-white rounded-xl"
                             >
                               Edit
                             </Link>
@@ -185,7 +185,7 @@ export default function Beanty() {
                                   setformId(formm._id);
                                   handleDelete();
                                 }}
-                                className="hidden sm:inline     hover:bg-gradient-to-r from-orange-300 to-orange-500 hover:text-white  bg-opacity-90 text-orange-700 font-medium py-2 px-6 border  rounded-xl cursor-pointer"
+                                className="hidden px-6 py-2 font-medium text-orange-700 border cursor-pointer sm:inline hover:bg-gradient-to-r from-orange-300 to-orange-500 hover:text-white bg-opacity-90 rounded-xl"
                               >
                                 Delete
                               </span>
@@ -205,11 +205,11 @@ export default function Beanty() {
           </div>
         </div>
         {currentUser?.isInventManger && (
-        <div className="flex justify-center items-center mt-8 mb-6">
-        <span className=" ">
+        <div className="flex items-center justify-center mt-8 mb-6">
+        <span className="">
               <Link
                 to={"/Createshop"}
-                className="hidden sm:inline   border hover:bg-gradient-to-r from-orange-300 to-orange-500 hover:text-white  text-slate-600 font-medium  py-3    rounded-3xl cursor-pointer"
+                className="hidden py-3 font-medium border cursor-pointer sm:inline hover:bg-gradient-to-r from-orange-300 to-orange-500 hover:text-white text-slate-600 rounded-3xl"
               >
                 <button className="w-[300px]">
                 Add New Shop

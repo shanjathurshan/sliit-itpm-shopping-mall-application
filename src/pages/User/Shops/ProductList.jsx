@@ -20,7 +20,7 @@ export default function ProductList() {
   const [filter, setfilter] = useState([]);
   const [query, setQuery] = useState(" ");
 
-  const { productId } = useParams();
+  const { productId,shoptype} = useParams();
 
 
 
@@ -116,7 +116,7 @@ export default function ProductList() {
 
       </div>
 
-      <div className="ml-8 mt-7 flex justify-center items-center">
+      <div className="flex items-center justify-center ml-8 mt-7">
 
         <form>
           <input
@@ -156,14 +156,14 @@ export default function ProductList() {
                     className="w-[400px] h-[520px] mt-10 mb-[-120px] rounded-xl border-none bg-white "
                   >
                     <div className="px-6 py-4">
-                      <div className="flex justify-center items-center ">
+                      <div className="flex items-center justify-center ">
                         <img
-                          className="w-56 h-36 rounded-full  object-cover"
+                          className="object-cover w-56 rounded-full h-36"
                           src={formm.image}
                         />
                       </div>
 
-                      <div className=" border  rounded-3xl mt-6 h-44 shadow-md  bg-white bg-opacity-50 ">
+                      <div className="mt-6 bg-white bg-opacity-50 border shadow-md rounded-3xl h-44">
                         <div className="flex gap-4 ml-4">
                           <div className="font-extralight text-md">Title:</div>
 
@@ -213,10 +213,10 @@ export default function ProductList() {
 
 <>
 {currentUser?.isInventManger && (
-                          <div className="flex justify-center items-center gap-6 mt-6">
+                          <div className="flex items-center justify-center gap-6 mt-6">
                             <Link
                               to={`/updateproduct/${formm._id}`}
-                              className="hidden sm:inline    hover:bg-gradient-to-r from-blue-500 to-blue-800  bg-opacity-90 hover:text-white  text-blue-900 font-medium  py-1 px-8 border  rounded-xl cursor-pointer"
+                              className="hidden px-8 py-1 font-medium text-blue-900 border cursor-pointer sm:inline hover:bg-gradient-to-r from-blue-500 to-blue-800 bg-opacity-90 hover:text-white rounded-xl"
                             >
                               Edit
                             </Link>
@@ -226,11 +226,17 @@ export default function ProductList() {
                                   setformId(formm._id);
                                   handleDelete();
                                 }}
-                                className="hidden sm:inline     hover:bg-gradient-to-r from-orange-300 to-orange-500 hover:text-white  bg-opacity-90 text-orange-700 font-medium py-2 px-6 border  rounded-xl cursor-pointer"
+                                className="hidden px-6 py-2 font-medium text-orange-700 border cursor-pointer sm:inline hover:bg-gradient-to-r from-orange-300 to-orange-500 hover:text-white bg-opacity-90 rounded-xl"
                               >
                                 Delete
                               </span>
                             </div>
+                            <Link
+                            to={`/admin/promotion-add/${formm._id}/${productId}/${shoptype}`}
+                            className="hidden px-8 py-1 font-medium text-blue-500 border cursor-pointer sm:inline hover:bg-gradient-to-r from-blue-500 to-blue-800 bg-opacity-90 hover:text-white rounded-xl"
+                          >
+                            Promotion
+                          </Link>
                             </div>
 )}
                         </>
@@ -245,8 +251,8 @@ export default function ProductList() {
             )}
           </div>
         </div>
-        <div className="flex justify-center items-center mt-20 mb-5">
-      <button className="text-md font-medium hover:bg-opacity-90    w-48 h-10 whitespace-nowrap rounded-full bg-blue-600 text-white mb-3" onClick={generatePDF}>Generate PDF Report</button>
+        <div className="flex items-center justify-center mt-20 mb-5">
+      <button className="w-48 h-10 mb-3 font-medium text-white bg-blue-600 rounded-full text-md hover:bg-opacity-90 whitespace-nowrap" onClick={generatePDF}>Generate PDF Report</button>
       </div>
       </div>
      

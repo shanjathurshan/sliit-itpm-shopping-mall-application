@@ -66,7 +66,7 @@ function App() {
                     <Route path="/update-clothshope/:updateCId" element={<UpdateClothshop />} />
                     <Route path="/createBeauty" element={<CreateBeutyshop />} />
                     <Route path="/update-beautyshope/:updateBId" element={<UpdateBeautyshop />} />
-                    <Route path="/product/:productId" element={<ProductList />} />
+                    <Route path="/product/:productId/:shoptype" element={<ProductList />} />
                     <Route path="/createproduct/:creatId" element={<CreateProduct />} />
                     <Route path="/updateproduct/:updatePId" element={<Updateproduct />} />
                     </Route>

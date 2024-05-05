@@ -76,10 +76,15 @@ function EditPromotion() {
     }, [promotionId])
 
     useEffect(() => {
+       if(Number(promotion?.discountRate) < 0){
+           setPromotion({...promotion, discountRate: 0})
+       }
+       else{
         setPromotion({
             ...promotion,
             newPrice: `${Number(promotion?.oldPrice) - Number((Number(promotion?.oldPrice) * Number(promotion?.discountRate) / 100))}`
         })
+       }
     }, [promotion?.discountRate])
 
     return (
@@ -183,6 +188,7 @@ function EditPromotion() {
                             id="discountRate"
                             name="discountRate"
                             value={promotion?.discountRate}
+                           
                             onChange={(e) => {
                                 setPromotion({ ...promotion, discountRate: e.target.value });
                             }}
@@ -217,6 +223,7 @@ function EditPromotion() {
                             type="date"
                             id="startDate"
                             name="startDate"
+                            min={new Date().toISOString().split('T')[0]}
                             value={promotion?.startDate}
                             onChange={(e) => {
                                 setPromotion({ ...promotion, startDate: e.target.value });
@@ -232,6 +239,7 @@ function EditPromotion() {
                             type="date"
                             id="endDate"
                             name="endDate"
+                            min={new Date().toISOString().split('T')[0]}
                             value={promotion?.endDate}
                             onChange={(e) => {
                                 setPromotion({ ...promotion, endDate: e.target.value });
