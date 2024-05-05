@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const API_URL = "http://localhost:8080";
-export const IMAGE_BUCKET_URL = "http://localhost:8080/images";
+export const IMAGE_BUCKET_URL = "http://localhost:8080/images/";
 
 export const NO_IMAGE_URL = "/images/no-image.jpg";
 
@@ -35,4 +35,19 @@ export const postMultipartData = async (endpoint, data) => {
       console.error("Error fetching data:", error);
       throw error;
     }
-  };
+};
+
+export const patchMultipartData = async (endpoint, data) => {
+  try {
+    const response = await axios.patch(API_URL+endpoint, data, {
+      headers: {
+        // Authorization: `Bearer ${LoginAuthToken()}`,
+        "content-type": "multipart/form-data",
+      },
+    });
+    return response;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    throw error;
+  }
+};

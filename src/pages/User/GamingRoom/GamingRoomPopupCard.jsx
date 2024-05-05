@@ -3,17 +3,20 @@ import { Dialog, RadioGroup, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { StarIcon } from "@heroicons/react/20/solid";
 import Button from "../../../components/Button/Button";
+import { API_URL, IMAGE_BUCKET_URL, patchMultipartData, postMultipartData } from "../../../lib/consts";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const product = {
   name: "Basic Tee 6-Pack ",
   price: "$192",
   rating: 3.9,
   sizes: [
-    { name: "2-3 PM", inStock: false },
-    { name: "3-4 PM", inStock: true },
-    { name: "4-5 PM", inStock: false },
-    { name: "5-6 PM", inStock: false },
-    { name: "6-7 PM", inStock: true },
+    { name: "2-3", inStock: true },
+    { name: "3-4", inStock: true },
+    { name: "4-5", inStock: true },
+    { name: "5-6", inStock: true },
+    { name: "6-7", inStock: true },
   ],
 };
 
@@ -27,39 +30,98 @@ const GamingRoomPopupCard = ({ data }) => {
   // const [onDate, setOnDate] = useState(new Date());
   const [validateMessage, setValidateMessage] = useState("");
   const [datas, setDatas] = useState(data);
+  const [gameSlots, setGameSlots] = useState(product.sizes);
 
   const [formData, setFormData] = useState({
+    gameId: data._id,
     userId: "65ff4f4a3f246e8f5a6efc0a",
-    selectedSize: { name: "", inStock: false },
-    date: new Date(),
+    booking_time: "",
+    booking_date: new Date(),
   });
+
+  useEffect(() => {
+    reFetchBookingData(new Date());
+  }, []);
 
   const onChangeDate = e => {
     // setOnDate(e.target.value);
+    console.log(e.target.value)
     setFormData({
       ...formData,
-      date: e.target.value,
+      booking_date: e.target.value,
     });
+
+    reFetchBookingData(e.target.value);
+  };
+
+  const reFetchBookingData = async (date) => {
+    const bodyData = {
+      gameId: data._id, // Example game ID
+      booking_date: date, // Example booking date
+    };
+    await fetch(`${API_URL}/games/bookings/getByDate`, {
+      method: 'POST', // Use POST for sending a body
+      headers: {
+        'Content-Type': 'application/json', // Indicates you're sending JSON
+      },
+      body: JSON.stringify(bodyData), // Convert body data to JSON
+    })
+      .then((res) => {
+        if (res.status === 200) {
+          return res.json();
+        } else {
+          return [];
+        }
+      })
+      .then((res) => {
+        console.log(res)
+
+          const updatedSlots = gameSlots.map((slot) => {
+            const bookingMatch = res.some(
+              (booking) => booking.booking_time === slot.name
+            );
+            return bookingMatch ? { ...slot, inStock: false } : { ...slot, inStock: true };
+          });
+          setGameSlots(updatedSlots);
+
+        // setGameList(res);
+      });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!selectedSize) {
+    if (!formData.booking_time) {
       setValidateMessage("Please select a slot*");
       return;
     }
     setValidateMessage("");
 
-    setFormData({
-      ...formData,
-      selectedSize: {
-        name: selectedSize.name,
-        inStock: selectedSize.inStock,
-      }
-    });
+    await fetch(`${API_URL}/games/bookings`, {
+      method: 'POST', // Use POST for sending a body
+      headers: {
+        'Content-Type': 'application/json', // Indicates you're sending JSON
+      },
+      body: JSON.stringify(formData), // Convert body data to JSON
+    })
+      .then((res) => {
+        if (res.status === 201) {
+          return res.json();
+        } else {
+          return [];
+        }
+      })
+      .then((res) => {
+        console.log(res)
+        toast("Gameing room booked successfully!");
+        setFormData({ gameId: data._id, userId: "65ff4f4a3f246e8f5a6efc0a", booking_time: null, booking_date: new Date() })
+        setTimeout(() => {
+          setOpen(false)
+        }, 1000);
+        reFetchBookingData(new Date());
+      });
 
-    console.log(formData);
+    // console.log(formData);
 
   };
 
@@ -89,6 +151,10 @@ const GamingRoomPopupCard = ({ data }) => {
             <div className="fixed inset-0 hidden bg-gray-500 bg-opacity-75 transition-opacity md:block" />
           </Transition.Child>
 
+          <ToastContainer position="bottom-right"/>
+
+          
+
           <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
             <div className="flex min-h-full items-stretch justify-center text-center md:items-center md:px-2 lg:px-4">
               <Transition.Child
@@ -114,7 +180,7 @@ const GamingRoomPopupCard = ({ data }) => {
                     <div className="grid w-full grid-cols-1 items-start gap-x-6 gap-y-8 sm:grid-cols-12 lg:gap-x-8">
                       <div className="aspect-h-3 aspect-w-2 overflow-hidden rounded-lg bg-gray-100 sm:col-span-4 lg:col-span-5">
                         <img
-                          src={datas.image}
+                          src={IMAGE_BUCKET_URL + datas.image}
                           alt={datas.image}
                           className="object-cover object-center"
                         />
@@ -128,12 +194,9 @@ const GamingRoomPopupCard = ({ data }) => {
                           aria-labelledby="information-heading"
                           className="mt-2"
                         >
-                          <h3 id="information-heading" className="sr-only">
-                            Product information
-                          </h3>
 
                           <p className="text-2xl text-gray-900">
-                            ${datas.price}
+                            Rs. {datas.price}.00
                           </p>
 
                           {/* Reviews */}
@@ -154,14 +217,11 @@ const GamingRoomPopupCard = ({ data }) => {
                                   />
                                 ))}
                               </div>
-                              <p className="sr-only">
-                                {product.rating} out of 5 stars
-                              </p>
                               <a
                                 href="#"
                                 className="ml-3 text-sm font-medium text-indigo-600 hover:text-indigo-500"
                               >
-                                {datas.players}
+                                2-4 players
                               </a>
                             </div>
                           </div>
@@ -171,9 +231,12 @@ const GamingRoomPopupCard = ({ data }) => {
                           aria-labelledby="options-heading"
                           className="mt-10"
                         >
-                          <h3 id="options-heading" className="sr-only">
-                            Product options
-                          </h3>
+                        <div className="flex items-center justify-between mb-3">
+                                <h4 className="text-sm font-medium text-gray-900">
+                                  Choose the date 
+                                </h4>
+                                <span className="text-red-500">{validateMessage}</span>
+                              </div>
 
                           <form onSubmit={handleSubmit}>
                             <div className="relative">
@@ -181,10 +244,11 @@ const GamingRoomPopupCard = ({ data }) => {
                                 type="date"
                                 name="date"
                                 id="date"
-                                value={formData.date}
+                                value={formData.booking_date}
                                 onChange={onChangeDate}
                                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full ps-6 p-2.5"
                                 placeholder="Select date"
+                                min={new Date().toISOString().split('T')[0]}
                                 required
                               />
                               <div className="absolute inset-y-0 end-0 flex items-center p-3.5 pointer-events-none">
@@ -201,7 +265,7 @@ const GamingRoomPopupCard = ({ data }) => {
                             </div>
 
                             {/* Sizes */}
-                            <div className="mt-10">
+                            <div className="mt-6">
                               <div className="flex items-center justify-between">
                                 <h4 className="text-sm font-medium text-gray-900">
                                   Choose the slot 
@@ -211,14 +275,18 @@ const GamingRoomPopupCard = ({ data }) => {
 
                               <RadioGroup
                                 value={selectedSize}
-                                onChange={setSelectedSize}
-                                className="mt-4"
+                                onChange={(val) => {
+                                  setFormData({
+                                    ...formData,
+                                    booking_time: val.name,
+                                  });
+                                  setSelectedSize(val);
+                                }}
+                                className="mt-3"
                               >
-                                <RadioGroup.Label className="sr-only">
-                                  Choose a size
-                                </RadioGroup.Label>
+
                                 <div className="grid grid-cols-4 gap-4">
-                                  {product.sizes.map((size) => (
+                                  {gameSlots.map((size) => (
                                     <RadioGroup.Option
                                       key={size.name}
                                       value={size}

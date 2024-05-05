@@ -1,8 +1,15 @@
 import React, { useEffect } from "react";
 import Button from "../../../../components/Button/Button";
 import { PencilSquareIcon, PlusCircleIcon } from "@heroicons/react/24/outline";
+import { API_URL,IMAGE_BUCKET_URL } from "../../../../lib/consts";
 
-const GameCenterUpdate = ({ isOpen, onSubmit, formData, setFormData, data }) => {
+const GameCenterUpdate = ({
+  isOpen,
+  onSubmit,
+  formData,
+  setFormData,
+  data,
+}) => {
   const [showModal, setShowModal] = React.useState(false);
 
   const handleChange = (e) => {
@@ -11,37 +18,23 @@ const GameCenterUpdate = ({ isOpen, onSubmit, formData, setFormData, data }) => 
     setFormData({ ...formData, [name]: newValue });
   };
 
-  useEffect(() => {
-    console.log("second", data)
-    // setFormData(data);
-    // // setFormData({
-    // //   title: "",
-    // //   price: "",
-    // //   image: null,
-    // // });
-  }, [])
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const output = await onSubmit(formData);
     setShowModal(output);
-    setFormData({
-      title: "",
-      price: "",
-      image: null,
-    });
   };
 
   const handleImageChange = (event) => {
     const fileInput = event.target;
     if (fileInput.files && fileInput.files.length > 0) {
       const imageFile = fileInput.files[0];
-      // const imageUrl = URL.createObjectURL(imageFile);
+      const imageUrl = URL.createObjectURL(imageFile);
       setFormData({
         ...formData,
         image: imageFile,
       });
+      console.log(imageUrl)
     } else {
       // No file selected, reset the image and imageFile
       setFormData({
@@ -49,6 +42,12 @@ const GameCenterUpdate = ({ isOpen, onSubmit, formData, setFormData, data }) => 
         image: null,
       });
     }
+  };
+
+  const handleOpenModal = () => {
+    setShowModal(true);
+    console.log("first ", data);
+    setFormData(data);
   };
 
   return (
@@ -61,7 +60,10 @@ const GameCenterUpdate = ({ isOpen, onSubmit, formData, setFormData, data }) => 
         <span className="ms-2">Add New Game</span>
       </button> */}
 
-      <button onClick={() => setShowModal(true)} className="text-white  bg-green-500 p-2 rounded">
+      <button
+        onClick={handleOpenModal}
+        className="text-white  bg-green-500 p-2 rounded"
+      >
         <PencilSquareIcon className="w-4 h-4" />
       </button>
 
@@ -108,7 +110,6 @@ const GameCenterUpdate = ({ isOpen, onSubmit, formData, setFormData, data }) => 
                       action="#"
                     >
                       <div>
-                      {formData.title}
                         <label
                           htmlFor="title"
                           className="block mb-2 text-sm font-medium text-gray-900 default:text-white"
@@ -153,16 +154,27 @@ const GameCenterUpdate = ({ isOpen, onSubmit, formData, setFormData, data }) => 
                         >
                           Upload Image
                         </label>
-                        <input
-                          type="file"
-                          name="image"
-                          id="image"
-                          onChange={handleImageChange}
-                          accept="image/*"
-                          className="bg-white border text-sm rounded-lg block w-full  "
-                          placeholder=""
-                          required
-                        />
+                        <div className="grid grid-cols-4 items-end">
+                          <div className="col-span-1">
+                            <img
+                              src={IMAGE_BUCKET_URL  + data.image}
+                              onError={({ currentTarget }) => {
+                                currentTarget.onerror = null;
+                                currentTarget.src = "/images/thumbnail.svg";
+                              }}
+                              alt={data.image}
+                              className=" w-20 h-20 object-cover rounded-md"
+                            />
+                          </div>
+                          <input
+                            type="file"
+                            name="image"
+                            id="image"
+                            onChange={handleImageChange}
+                            accept="image/*"
+                            className="bg-white border text-sm rounded-lg block w-full h-fit col-span-3"
+                          />
+                        </div>
                       </div>
 
                       <Button

@@ -1,10 +1,32 @@
 
-  import React, { useState } from "react";
+  import React, { useState ,useEffect} from "react";
 
 import GameBookingCancel from "./GameBookingCancel";
-  
+import { API_URL, IMAGE_BUCKET_URL, patchMultipartData, postMultipartData } from "../../../../lib/consts";
+
   const GamingRoomBookings = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    
+    const [gameList, setGameList] = useState([]);
+
+    useEffect(() => {
+      fetchData();
+    }, []);
+  
+    const fetchData = async () => {
+      await fetch(`${API_URL}/games/bookings`)
+        .then((res) => {
+          if (res.status === 200) {
+            return res.json();
+          } else {
+            return [];
+          }
+        })
+        .then((res) => {
+          console.log("res", res)
+          setGameList(res);
+        });
+    };
   
     const toggleModal = () => {
       setIsModalOpen(!isModalOpen);
@@ -96,21 +118,21 @@ import GameBookingCancel from "./GameBookingCancel";
               </tr>
             </thead>
             <tbody>
-              {tableData.map((data, index) => (
+              {gameList.map((data, index) => (
                 <tr
                   key={index}
                   className="bg-white border-b default:bg-gray-800 default:border-gray-700 hover:bg-gray-50 default:hover:bg-gray-600"
                 >
                   <td className="px-6 py-4">{index+1}</td>
-                  <td className="px-6 py-4">{data.username}</td>
+                  <td className="px-6 py-4">Shan Jathurshan</td>
                   <th
                     scope="row"
                     className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap default:text-white"
                   >
-                    {data.title}
+                    {data.gameTitle}
                   </th>
-                  <td className="px-6 py-4">{data.date}</td>
-                  <td className="px-6 py-4">{data.slot}</td>
+                  <td className="px-6 py-4">{new Date(data.booking_date).toLocaleDateString("en-GB")}</td>
+                  <td className="px-6 py-4">{data.booking_time} PM</td>
                   <td className="px-6 py-4 text-right">
                     <div className="flex items-center justify-center">
 

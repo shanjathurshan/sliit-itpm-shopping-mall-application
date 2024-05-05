@@ -1,8 +1,30 @@
 import React from "react";
 import Button from "../../../components/Button/Button";
 import GamingRoomPopupCard from "./GamingRoomPopupCard";
-
+import { useEffect, useState } from "react";
+import { API_URL, IMAGE_BUCKET_URL, patchMultipartData, postMultipartData } from "../../../lib/consts";
 const GamingRooms = () => {
+  const [gameList, setGameList] = useState([]);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    await fetch(`${API_URL}/games`)
+      .then((res) => {
+        if (res.status === 200) {
+          return res.json();
+        } else {
+          return [];
+        }
+      })
+      .then((res) => {
+        console.log(res)
+        setGameList(res);
+      });
+  };
+
   const games = [
     {
       title: "GTA Vice City 1",
@@ -42,6 +64,8 @@ const GamingRooms = () => {
     },
   ];
 
+  
+
   return (
     <div className="fl-container text-white py-10 pt-20 pb-32">
       <h1 className="text-3xl font-extrabold  text-center">
@@ -49,13 +73,13 @@ const GamingRooms = () => {
       </h1>
 
       <div className="grid grid-cols-4 gap-10 mt-10">
-        {games.map((game, index) => (
+        {gameList.map((game, index) => (
           <div className="col-span-1" key={index}>
             <div className="bg-[#2c2c2c] rounded-xl">
               <img
-                src={game.image}
+                src={IMAGE_BUCKET_URL + game.image}
                 alt="GTA Vice City"
-                className="w-full rounded-t-xl"
+                className="w-full rounded-t-xl h-[200px] object-cover"
               />
               <div
                 className="p-5 rounded-b-xl"
@@ -68,9 +92,9 @@ const GamingRooms = () => {
                 <h2 className="text-xl font-bold">{game.title}</h2>
                 <p className="text-gray-300 mt-2 font-thin">
                   <span className=" text-md font-bold text-[#27ff00]">
-                    {game.price}$ per hour
+                  Rs. {game.price}.00 / hour 
                   </span>
-                  , {game.players}
+                   , 2-4 players
                 </p>
                 {/* <Button
                 bgColor="white"
