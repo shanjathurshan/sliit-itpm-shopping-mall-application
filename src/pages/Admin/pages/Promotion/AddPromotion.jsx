@@ -282,6 +282,7 @@ function AddPromotion() {
                     <button type="submit" class="px-16 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600" >Add Promotion</button>
                 </div>
             </form>
+            
         </div>
 
     )
