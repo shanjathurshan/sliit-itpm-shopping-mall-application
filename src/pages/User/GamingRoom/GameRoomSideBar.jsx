@@ -1,7 +1,8 @@
-import { Fragment, useState } from "react";
+import { Fragment, useState, useEffect } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { ArchiveBoxArrowDownIcon, BookmarkIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import Button from "../../../components/Button/Button";
+import { API_URL, IMAGE_BUCKET_URL, patchMultipartData, postMultipartData } from "../../../lib/consts";
 
 const gamingDetails = [
   {
@@ -26,6 +27,44 @@ const gamingDetails = [
 
 const GameRoomSideBar = () => {
   const [open, setOpen] = useState(false);
+  const [gameList, setGameList] = useState([]);
+  const [price, setPrice] = useState(0);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    const bodyData = {
+      userId: "65ff4f4a3f246e8f5a6efc0a",
+    };
+
+    await fetch(`${API_URL}/games/bookings/getByUserId`, {
+      method: 'POST', // Use POST for sending a body
+      headers: {
+        'Content-Type': 'application/json', // Indicates you're sending JSON
+      },
+      body: JSON.stringify(bodyData), // Convert body data to JSON
+    })
+      .then((res) => {
+        if (res.status === 200) {
+          return res.json();
+        } else {
+          return [];
+        }
+      })
+      .then((res) => {
+        console.log("res", res)
+        setGameList(res);
+      });
+
+      var price = 0;
+      gameList.forEach((game) => {
+        price += game.gamePrice;
+      });
+      setPrice(price)
+
+  };
 
   return (
     <>
@@ -95,12 +134,12 @@ const GameRoomSideBar = () => {
                               role="list"
                               className="-my-6 divide-y divide-gray-200"
                             >
-                              {gamingDetails.map((product) => (
-                                <li key={product.id} className="flex py-6">
+                              {gameList.map((product) => (
+                                <li key={product._id} className="flex py-6">
                                   <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                                     <img
-                                      src={product.image}
-                                      alt={product.image}
+                                      src={IMAGE_BUCKET_URL + product.image}
+                                      alt={IMAGE_BUCKET_URL + product.image}
                                       className="h-full w-full object-cover object-center"
                                     />
                                   </div>
@@ -109,19 +148,19 @@ const GameRoomSideBar = () => {
                                     <div>
                                       <div className="flex justify-between text-base font-medium text-white">
                                         <h3>
-                                          <a href={product.title}>
-                                            {product.title}
+                                          <a href={product.gameTitle}>
+                                            {product.gameTitle}
                                           </a>
                                         </h3>
-                                        <p className="ml-4">{product.price}</p>
+                                        <p className="ml-4">Rs. {product.gamePrice}.00</p>
                                       </div>
                                       <p className="mt-1 text-sm text-gray-200">
-                                      Slot: {product.slot}
+                                      Slot: {product.booking_time} PM
                                       </p>
                                     </div>
                                     <div className="flex flex-1 items-end justify-between text-sm">
                                       <p className={`rounded px-2 py-1 ${new Date(product.date) > new Date() ? 'bg-green-400 text-black' : 'bg-red-400 text-white' }`}>
-                                        Date: {product.date}
+                                        Date: {new Date(product.booking_date).toLocaleDateString("en-GB")}
                                       </p>
 
                                       <div className="flex">
@@ -143,8 +182,8 @@ const GameRoomSideBar = () => {
 
                       <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
                         <div className="flex justify-between text-base font-medium text-white">
-                          <p>Subtotal</p>
-                          <p>Rs. 3900.00</p>
+                          <p>Total amount you spend</p>
+                          <p>Rs. {price}.00</p>
                         </div>
                        
                        

@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import Button from "../../../../components/Button/Button";
 import { PencilSquareIcon, PlusCircleIcon } from "@heroicons/react/24/outline";
-import { API_URL } from "../../../../lib/consts";
+import { API_URL,IMAGE_BUCKET_URL } from "../../../../lib/consts";
 
 const GameCenterUpdate = ({
   isOpen,
@@ -110,7 +110,6 @@ const GameCenterUpdate = ({
                       action="#"
                     >
                       <div>
-                        {formData.title}
                         <label
                           htmlFor="title"
                           className="block mb-2 text-sm font-medium text-gray-900 default:text-white"
@@ -158,7 +157,7 @@ const GameCenterUpdate = ({
                         <div className="grid grid-cols-4 items-end">
                           <div className="col-span-1">
                             <img
-                              src={API_URL + "/uploads/" + data.image}
+                              src={IMAGE_BUCKET_URL  + data.image}
                               onError={({ currentTarget }) => {
                                 currentTarget.onerror = null;
                                 currentTarget.src = "/images/thumbnail.svg";

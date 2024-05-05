@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const API_URL = "http://localhost:8080";
-export const IMAGE_BUCKET_URL = "http://localhost:8080/images";
+export const IMAGE_BUCKET_URL = "http://localhost:8080/images/";
 
 export const NO_IMAGE_URL = "/images/no-image.jpg";
 
